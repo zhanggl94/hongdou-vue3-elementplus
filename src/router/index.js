@@ -1,3 +1,12 @@
+/*
+ * @Descripttion: router index
+ * @Version:
+ * @Author: zhanggl
+ * @Date: 2021-06-18 21:44:58
+ * @LastEditors: zhanggl
+ * @LastEditTime: 2021-06-19 06:48:33
+ */
+
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 
@@ -18,10 +27,11 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    meta:{
-      title:'登录'
+    meta: {
+      title: '登录'
     },
-    component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
+    component: () =>
+      import(/* webpackChunkName: "Login" */ '../views/Login.vue')
   }
 ]
 

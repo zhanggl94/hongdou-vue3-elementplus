@@ -1,0 +1,14 @@
+/*
+ * @Descripttion: user state
+ * @Version:
+ * @Author: zhanggl
+ * @Date: 2021-06-19 06:22:25
+ * @LastEditors: zhanggl
+ * @LastEditTime: 2021-06-19 06:49:10
+ */
+
+export default {
+  id: '',
+  name: '',
+  token: ''
+}
