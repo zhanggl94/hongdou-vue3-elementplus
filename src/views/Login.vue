@@ -4,12 +4,16 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-20 00:47:08
+ * @LastEditTime: 2021-06-20 13:25:07
 -->
 
 <template>
   <div class="sign-container">
-    <div class="sign-logo"></div>
+    <div class="header">
+      <div class="github">
+        <v-git-hub></v-git-hub>
+      </div>
+    </div>
     <div class="sign-form">
       <el-form ref="loginForm" :model="formInfo" :rules="rules">
         <el-form-item prop="username">
@@ -44,8 +48,12 @@
 <script>
 import { validateUsername, validatePassword } from '../utils/utils'
 import userMUTypes from '../store/modules/user/mutation-types'
+import vGitHub from '../components/GitHubRepository.vue'
 
 export default {
+  components: {
+    vGitHub,
+  },
   data() {
     return {
       formInfo: {
@@ -85,6 +93,16 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.sign-container .header {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.sign-container .header .github {
+  margin: 30px;
 }
 .sign-logo {
   height: 200px;
