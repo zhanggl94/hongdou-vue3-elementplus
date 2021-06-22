@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-19 06:48:33
+ * @LastEditTime: 2021-06-22 08:49:46
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -14,7 +14,17 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        path: '/message',
+        name: 'Message',
+        meta: {
+          title: 'message'
+        },
+        component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
+      }
+    ]
   },
   // {
   //   path: '/about',

@@ -4,13 +4,13 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-20 13:25:07
+ * @LastEditTime: 2021-06-22 11:34:25
 -->
 
 <template>
   <div class="sign-container">
-    <div class="header">
-      <div class="github">
+    <div class="sign-header">
+      <div class="sign-github">
         <v-git-hub></v-git-hub>
       </div>
     </div>
@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import { validateUsername, validatePassword } from '../utils/utils'
 import userMUTypes from '../store/modules/user/mutation-types'
 import vGitHub from '../components/GitHubRepository.vue'
+import { ElMessage } from 'element-plus'
 
 export default {
   components: {
@@ -61,8 +61,10 @@ export default {
         password: '',
       },
       rules: {
-        username: [{ validator: validateUsername, trigger: 'blur' }],
-        password: [{ validator: validatePassword, trigger: 'blur' }],
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
       },
     }
   },
@@ -70,12 +72,13 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log('submit....')
           this.$store.commit(userMUTypes.SET_USERINFO, {
             username: this.formInfo.username,
           })
+          ElMessage.success('登录成功')
+          this.$router.push('/')
         } else {
-          console.log('error submit!!')
+          ElMessage.error('登录失败')
           return false
         }
       })
@@ -87,22 +90,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .sign-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.sign-container .header {
+.sign-container .sign-header {
   width: 100%;
   height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
-.sign-container .header .github {
+.sign-container .sign-header .sign-github {
   margin: 30px;
+}
+.sign-github svg {
+  font-size: 30px;
+  color: #000000;
 }
 .sign-logo {
   height: 200px;
