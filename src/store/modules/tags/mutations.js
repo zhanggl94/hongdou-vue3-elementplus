@@ -13,4 +13,9 @@ export default {
     [tagsMUTypes.ADD](state, data) {
         state.tagList.push(data)
     },
+    [tagsMUTypes.DELETE](state, data) {
+        if (state.tagList.length) {
+            state.tagList.splice(data.index, 1)
+        }
+    }
 }

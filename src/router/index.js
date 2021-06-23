@@ -17,10 +17,18 @@ const routes = [
     component: Home,
     children: [
       {
+        path:'/dashboard',
+        name:'Dashboard',
+        meta:{
+          title:'主页'
+        },
+        component:()=>import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue')
+      },
+      {
         path: '/message',
         name: 'Message',
         meta: {
-          title: 'message'
+          title: '消息'
         },
         component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
       }

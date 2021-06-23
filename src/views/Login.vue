@@ -17,7 +17,7 @@
     <div class="sign-form">
       <el-form ref="loginForm" :model="formInfo" :rules="rules">
         <el-form-item prop="username">
-          <el-input v-model="formInfo.username" placeholder="username">
+          <el-input v-model="formInfo.username" placeholder="username" @keydown.enter="submitForm('loginForm')">
             <template #prepend>
               <el-tooltip effect="dark" content="用户名" placement="left">
                 <el-button icon="el-icon-user"></el-button>
@@ -26,7 +26,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" v-model="formInfo.password">
+          <el-input type="password" v-model="formInfo.password" @keydown.enter="submitForm('loginForm')">
             <template #prepend>
               <el-tooltip effect="dark" content="密码" placement="left">
                 <el-button icon="el-icon-lock"></el-button>
@@ -35,10 +35,12 @@
           </el-input>
         </el-form-item>
         <el-from-item>
-          <el-button type="primary" @click.prevent="submitForm('loginForm')"
+          <div class="sign-submit">
+            <el-button type="primary" @click="submitForm('loginForm')"
             >登录</el-button
           >
           <el-button @click="resetForm('loginForm')">重置</el-button>
+          </div>
         </el-from-item>
       </el-form>
     </div>
@@ -123,5 +125,11 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+}
+.sign-submit{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>

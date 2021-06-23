@@ -8,5 +8,5 @@
  */
 
 export default {
-    tagList: [{ title: 'tags', path: '/tags' }, { title: 'dashboard', path: '/dashboard' }]
+    tagList: [{ title: '标签',name:'messages', path: '/message' }, { title: '主页',name:'dashboard', path: '/dashboard' }]
 }

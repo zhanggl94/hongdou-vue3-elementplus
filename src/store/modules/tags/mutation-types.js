@@ -9,6 +9,6 @@
 
 export default{
     'ADD':'ADD',
-    'REMOVE':'REMOVE',
+    'DELETE':'DELETE',
     'CLEAR':'CLEAR'
 }

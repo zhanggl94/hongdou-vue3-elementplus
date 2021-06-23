@@ -6,3 +6,7 @@
  * @LastEditors: zhanggl
  * @LastEditTime: 2021-06-23 16:59:31
 -->
+
+<template>
+  <div>Dashboard</div>
+</template>
