@@ -4,11 +4,12 @@
  * @Autor: zhanggl
  * @Date: 2021-06-21 16:53:53
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-22 15:57:28
+ * @LastEditTime: 2021-06-23 16:55:17
 -->
 
 <template>
   <div class="header">
+    <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="changeCollapse">
       <i v-if="collapse" class="el-icon-s-fold"></i>
       <i v-else class="el-icon-s-unfold"></i>
@@ -17,6 +18,7 @@
       <span>账单</span>
     </div>
     <div class="user">
+      <!-- 消息中心 -->
       <div class="user-col bell">
         <el-tooltip
           effect="dark"
@@ -33,7 +35,24 @@
         </el-tooltip>
         <span class="badge" v-if="unReadMessageList.length"></span>
       </div>
-      <div class="user-col avatar"></div>
+      <!-- 用户头像 -->
+      <div class="avatar">
+        <img src="../assets/img/img.jpg" />
+      </div>
+      <!-- 用户下拉菜单 -->
+      <div class="user-col">
+        <el-dropdown trigger="click" @command="handleUserCommand">
+          <span class="el-dropdown-link">
+            {{ username }}
+            <i class="el-icon-caret-bottom"></i>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
       <div class="user-col github">
         <v-git-hub></v-git-hub>
       </div>
@@ -43,11 +62,18 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
+import userMUTypes from '../store/modules/user/mutation-types'
 import vGitHub from './GitHubRepository.vue'
 
 export default {
   components: {
     vGitHub,
+  },
+  data() {
+    return {
+      // username: this.$store.state.user.username,
+      username: localStorage.getItem('username'),
+    }
   },
   computed: {
     ...mapState(['collapse']),
@@ -55,6 +81,12 @@ export default {
   },
   methods: {
     ...mapMutations(['changeCollapse']),
+    handleUserCommand(command) {
+      if (command === 'logout') {
+        this.$store.commit(userMUTypes.CLEAR_USERINFO)
+        this.$router.push('/login')
+      }
+    },
   },
 }
 </script>
@@ -88,7 +120,7 @@ export default {
 .header .user .user-col {
   margin-right: 20px;
 }
-.header .user .bell{
+.header .user .bell {
   position: relative;
 }
 .header .user .bell .bell-link {
@@ -103,7 +135,23 @@ export default {
   background-color: #f56c6c;
   border-radius: 4px;
 }
+.header .user .avatar {
+  color: #ffffff;
+}
+.header .user .avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.header .user .user-name {
+  margin-left: 20px;
+}
+.el-dropdown-link {
+  color: #ffffff;
+  cursor: pointer;
+}
 .header .user .github a {
   color: #ffffff;
+  font-size: 30px;
 }
 </style>
