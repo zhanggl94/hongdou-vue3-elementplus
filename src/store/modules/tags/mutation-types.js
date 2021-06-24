@@ -7,8 +7,9 @@
  * @LastEditTime: 2021-06-23 17:24:50
  */
 
-export default{
-    'SET':'SET',
-    'DELETE':'DELETE',
-    'CLEAR':'CLEAR'
+export default {
+    SET: 'SET',
+    DELETE: 'DELETE',
+    CLOSE_ALL: 'CLOSE_ALL',
+    CLOSE_OTHERS: 'CLOSE_OTHERS'
 }

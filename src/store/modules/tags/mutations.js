@@ -14,8 +14,13 @@ export default {
         state.tagList.push(data)
     },
     [tagsMUTypes.DELETE](state, data) {
-        // if (state.tagList.length) {
-            state.tagList.splice(data.index, 1)
-        // }
+        state.tagList.splice(data.index, 1)
+    },
+    [tagsMUTypes.CLOSE_ALL](state) {
+        state.tagList = [];
+    },
+    [tagsMUTypes.CLOSE_OTHERS](state, data) {
+        console.log('data', data)
+        state.tagList = state.tagList.filter(item => item.path === data.path)
     }
 }
