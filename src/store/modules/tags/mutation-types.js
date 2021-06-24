@@ -8,7 +8,7 @@
  */
 
 export default{
-    'ADD':'ADD',
+    'SET':'SET',
     'DELETE':'DELETE',
     'CLEAR':'CLEAR'
 }
