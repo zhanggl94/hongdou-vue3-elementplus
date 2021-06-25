@@ -4,26 +4,30 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-23 14:01:05
+ * @LastEditTime: 2021-06-25 17:28:12
 -->
 
 <template>
-    <div>
-        <v-header></v-header>
-        <div class="content-box">
-            <v-sidebar></v-sidebar>
-            <div class="container">
-                <v-tags></v-tags>
-                <router-view v-slot="{Component}">
-                    <transition name="move" mode="out-in">
-                        <keep-alive :include="tagList">
-                            <component :is="Component"></component>
-                        </keep-alive>
-                    </transition>
-                </router-view>
-            </div>
+  <div>
+    <v-header></v-header>
+    <div class="middle">
+      <div class="sidebar">
+        <v-sidebar></v-sidebar>
+      </div>
+      <div class="content-box flex-weight1">
+        <v-tags></v-tags>
+        <div class="content">
+          <router-view v-slot="{ Component }">
+            <transition name="move" mode="out-in">
+              <keep-alive :include="tagList">
+                <component :is="Component"></component>
+              </keep-alive>
+            </transition>
+          </router-view>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -33,26 +37,32 @@ import vSidebar from '../components/Sidebar.vue'
 import vTags from '../components/Tags'
 
 export default {
-    components: {
-        vHeader,
-        vSidebar,
-        vTags
-    },
-    computed: {
-        ...mapState({
-            tagList: state => state.tags.tagList.map(item => item.name)
-        })
-    }
+  components: {
+    vHeader,
+    vSidebar,
+    vTags,
+  },
+  computed: {
+    ...mapState({
+      tagList: (state) => state.tags.tagList.map((item) => item.name),
+    }),
+  },
 }
 </script>
 
 
 <style scoped>
-.home {
-    background-color: #f6f6f6;
-    /* display: flex;
+.middle {
+  display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center; */
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
+}
+.sidebar {
+  width: 250px;
+}
+.flex-weight1 {
+  flex-grow: 1;
 }
 </style>
