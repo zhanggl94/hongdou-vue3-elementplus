@@ -26,6 +26,7 @@ a {
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
     background: #f0f0f0;
+    height: 100%;
 }
 
 .content {
