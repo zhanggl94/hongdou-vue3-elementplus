@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-06-23 13:57:23
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-30 17:17:19
+ * @LastEditTime: 2021-06-30 18:03:13
 -->
 
 <template>
@@ -94,12 +94,13 @@ export default {
 <style>
 .sidebar {
   display: block;
-  /* position: absolute; */
   left: 0;
-  /* top: 70px; */
   bottom: 0;
   overflow-y: scroll;
   height: 100%;
+}
+.sidebar::-webkit-scrollbar {
+    width: 0;
 }
 .sidebar > ul {
   height: 100%;
