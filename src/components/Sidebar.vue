@@ -65,6 +65,17 @@ export default {
     return {
       sidebarData: [
         {
+          icon:'el-icon-truck',
+          index:'carbill',
+          title:'汽车账单',
+          subs:[
+            {
+              index:'billtype',
+              title:'账单类型',
+            },
+          ],
+        },
+        {
           icon: 'el-icon-warning-outline',
           index: 'error',
           title: '错误处理',

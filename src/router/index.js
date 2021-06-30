@@ -27,14 +27,24 @@ const routes = [
           title: '主页'
         },
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue')
-      }, {
+      },
+      {
         path: '/message',
         name: 'Message',
         meta: {
           title: '消息'
         },
         component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
-      }, {
+      },
+      {
+        path: '/billtype',
+        name: 'BillType',
+        meta: {
+          title: '账单类型'
+        },
+        component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/BillType.vue')
+      },
+      {
         path: '/permission',
         name: '403',
         meta: {
@@ -42,7 +52,8 @@ const routes = [
         },
         component: () => import(/* webpackChunkName: "403" */
           '../views/403.vue')
-      }, {
+      },
+      {
         path: '/404',
         name: '404',
         meta: {
@@ -53,14 +64,6 @@ const routes = [
       },
     ]
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // // route level code-splitting
-  //   // // this generates a separate chunk (about.[hash].js) for this route
-  //   // // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // },
   {
     path: '/login',
     name: 'Login',
