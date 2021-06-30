@@ -4,16 +4,20 @@
  * @Autor: zhanggl
  * @Date: 2021-06-23 13:57:23
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-28 17:57:19
+ * @LastEditTime: 2021-06-30 17:17:19
 -->
 
 <template>
   <div>
     <el-menu
+      class="sidebar-el-menu"
       background-color="#324157"
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
+      :collapse="collapse"
+      :default-active="onRoutes"
+      router
     >
       <template v-for="item in sidebarData">
         <template v-if="item.subs">
@@ -55,6 +59,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -69,13 +74,19 @@ export default {
               title: '权限测试',
             },
             {
-              index: 'error-404',
+              index: '404',
               title: '404',
             },
           ],
         },
       ],
     }
+  },
+  computed: {
+    ...mapState(['collapse']),
+    onRoutes() {
+      return this.$route.path.replace('/', '')
+    },
   },
 }
 </script>

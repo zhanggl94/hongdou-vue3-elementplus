@@ -4,15 +4,15 @@
  * @Autor: zhanggl
  * @Date: 2021-06-21 16:53:53
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-23 16:55:17
+ * @LastEditTime: 2021-06-30 17:07:41
 -->
 
 <template>
   <div class="header">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="changeCollapse">
-      <i v-if="collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
+      <i v-if="collapse" class="el-icon-s-unfold"></i>
+      <i v-else class="el-icon-s-fold"></i>
     </div>
     <div class="title">
       <span>账单</span>

@@ -35,7 +35,7 @@ const routes = [
         },
         component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
       }, {
-        path: '/403',
+        path: '/permission',
         name: '403',
         meta: {
           title: '没有权限'
