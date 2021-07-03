@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-24 17:27:29
+ * @LastEditTime: 2021-07-03 23:19:59
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -42,7 +42,7 @@ const routes = [
         meta: {
           title: '账单类型'
         },
-        component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/BillType.vue')
+        component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/billtype/BillType.vue')
       },
       {
         path: '/permission',
