@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-06 18:04:55
+ * @LastEditTime: 2021-07-07 16:55:08
 -->
 <template>
   <div>
@@ -19,7 +19,7 @@
         <el-button size="small" type="danger" icon="el-icon-delete" @click="deleteAllHandle">批量删除</el-button>
         <el-button size="small" type="primary" icon="el-icon-circle-plus">新建</el-button>
       </div>
-      <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable">
+      <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
         <el-table-column prop="type" width="100px" label="类型"></el-table-column>
         <el-table-column prop="order" width="100px" sortable label="排序"></el-table-column>
@@ -32,15 +32,27 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="dialog-box">
+      <el-dialog title="账单类型详情" v-model="billTypeDetailVisible">
+        <v-bill-type-detail></v-bill-type-detail>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
+import vBillTypeDetail from './BillTypeDetail.vue'
+
 export default {
   data() {
     return {
       billTypeList: [],
+      multipleSelection: [],
+      billTypeDetailVisible: false,
     }
+  },
+  components: {
+    vBillTypeDetail,
   },
   created() {
     this.billTypeList = this.getBillTypeList()
@@ -55,9 +67,12 @@ export default {
         { id: '4', order: 4, type: '停车费', note: '停车费note' },
       ]
     },
+    // 编辑单条
     editHandle(index, row) {
       console.log('row', row)
+      this.billTypeDetailVisible = true
     },
+    // 删除单条
     deleteHandle(index, row) {
       this.$confirm('确定要删除吗？', '提示', {
         confirmButtonText: '确定',
@@ -74,15 +89,32 @@ export default {
           console.error(err)
         })
     },
+    // 数据选中事件
+    selectionChangeHandle(selection) {
+      this.multipleSelection = selection
+    },
+    // 批量删除
     deleteAllHandle() {
+      if (!this.multipleSelection.length) {
+        this.$message.warning('请选择要删除的数据')
+        return
+      }
       this.$confirm('确定要删除选中内容吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          this.billTypeList.length = 0
-          this.$message.success('删除成功')
+          let deleteType = ''
+          console.log('item', this.multipleSelection)
+          for (let item of this.multipleSelection) {
+            deleteType += item.type + ' '
+            this.billTypeList.splice(
+              this.billTypeList.findIndex((t) => t.id === item.id),
+              1
+            )
+          }
+          this.$message.success(deleteType + '被删除成功')
         })
         .catch((err) => {
           this.$message.info('取消删除')

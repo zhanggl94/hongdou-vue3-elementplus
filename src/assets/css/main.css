@@ -91,11 +91,16 @@ a {
 /*BaseForm*/
 
 .form-box {
+    display: flex;
+    justify-content: center;
+}
+
+.form-box .large-input {
     width: 600px;
 }
 
-.form-box .line {
-    text-align: center;
+.form-box .small-input {
+    width: 300px
 }
 
 .el-time-panel__content::after,
@@ -105,6 +110,11 @@ a {
 
 .el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
     padding-bottom: 0;
+}
+
+/*Dialog*/
+.dialog-box {
+    align-items: center;
 }
 
 /*Upload*/

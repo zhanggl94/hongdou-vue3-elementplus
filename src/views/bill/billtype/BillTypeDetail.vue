@@ -4,16 +4,19 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-06 15:55:11
+ * @LastEditTime: 2021-07-07 17:01:58
 -->
 <template>
-  <div>
-    <el-form>
+  <div class="form-box">
+    <el-form label-width="70px" label-position="right">
       <el-form-item label="类型">
-        <el-input type="input" v-model="form.type"></el-input>
+        <el-input type="input" v-model="form.type" class="small-input"></el-input>
+      </el-form-item>
+      <el-form-item label="排序">
+        <el-input type="number" v-model="form.order" class="small-input"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input type="textarea" :rows="3" v-model="form.note"></el-input>
+        <el-input type="textarea" :rows="3" v-model="form.note" class="large-input"></el-input>
       </el-form-item>
       <el-button type="primary">确定</el-button>
       <el-button>取消</el-button>
@@ -23,12 +26,17 @@
 
 <script>
 export default {
+  // props: {
+  //   billTypeInfo
+  // },
   data() {
     return {
       form: {
         type: '',
+        order: 0,
         note: '',
       },
+      right: 'right',
     }
   },
 }
