@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-07 16:55:08
+ * @LastEditTime: 2021-07-08 11:35:52
 -->
 <template>
   <div>
@@ -33,8 +33,14 @@
       </el-table>
     </div>
     <div class="dialog-box">
-      <el-dialog title="账单类型详情" v-model="billTypeDetailVisible">
+      <el-dialog title="账单类型详情" v-model="dialogVisible" width="40%">
         <v-bill-type-detail></v-bill-type-detail>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button type="primary" @click="openDialog">确定</el-button>
+            <el-button @click="closeDialog">取消</el-button>
+          </span>
+        </template>
       </el-dialog>
     </div>
   </div>
@@ -48,7 +54,7 @@ export default {
     return {
       billTypeList: [],
       multipleSelection: [],
-      billTypeDetailVisible: false,
+      dialogVisible: false,
     }
   },
   components: {
@@ -69,8 +75,8 @@ export default {
     },
     // 编辑单条
     editHandle(index, row) {
+      this.openDialog()
       console.log('row', row)
-      this.billTypeDetailVisible = true
     },
     // 删除单条
     deleteHandle(index, row) {
@@ -120,6 +126,12 @@ export default {
           this.$message.info('取消删除')
           console.error(err)
         })
+    },
+    closeDialog() {
+      this.dialogVisible = false
+    },
+    openDialog() {
+      this.closeDialog()
     },
   },
 }

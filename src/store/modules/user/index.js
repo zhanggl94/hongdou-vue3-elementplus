@@ -4,14 +4,16 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-20 00:17:02
+ * @LastEditTime: 2021-07-08 17:10:35
  */
 
 import state from './state'
 import mutations from './mutations'
+import actions from './actions'
 
 const user = {
   state,
-  mutations
+  mutations,
+  actions
 }
 export default user

@@ -84,7 +84,7 @@ export default {
     handleUserCommand(command) {
       if (command === 'logout') {
         this.$store.commit(userMUTypes.CLEAR_USERINFO)
-        this.$router.push('/login')
+        this.$router.push('/signin')
       }
     },
   },

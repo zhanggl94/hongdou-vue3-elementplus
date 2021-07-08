@@ -1,10 +1,10 @@
 <!--
- * @Descripttion: login
+ * @Descripttion: signin
  * @Version: 
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-23 16:59:19
+ * @LastEditTime: 2021-07-08 17:13:15
 -->
 
 <template>
@@ -36,10 +36,8 @@
         </el-form-item>
         <el-from-item>
           <div class="sign-submit">
-            <el-button type="primary" @click="submitForm('loginForm')"
-            >登录</el-button
-          >
-          <el-button @click="resetForm('loginForm')">重置</el-button>
+            <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+            <el-button @click="resetForm('loginForm')">重置</el-button>
           </div>
         </el-from-item>
       </el-form>
@@ -48,7 +46,8 @@
 </template>
 
 <script>
-import userMUTypes from '../store/modules/user/mutation-types'
+// import userMUTypes from '../store/modules/user/mutation-types'
+import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
 import { ElMessage } from 'element-plus'
 
@@ -71,12 +70,11 @@ export default {
     }
   },
   methods: {
-    submitForm(formName) {
+    async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.commit(userMUTypes.SET_USERINFO, {
-            username: this.formInfo.username,
-          })
+          console.log('userACTypes', userACTypes)
+          this.$store.dispatch(userACTypes.SIGNIN) // 登录
           ElMessage.success('登录成功')
           this.$router.push('/')
         } else {
@@ -126,8 +124,8 @@ export default {
   justify-content: center;
   border-radius: 10px;
 }
-.sign-submit{
-  display:flex;
+.sign-submit {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;

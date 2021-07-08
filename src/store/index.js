@@ -14,11 +14,18 @@ import tags from './modules/tags'
 
 export default new Store({
   state: {
-    collapse: false
+    collapse: false,
+    loading: false
   },
   mutations: {
     changeCollapse(state) {
       state.collapse = !state.collapse
+    },
+    startLoading(state) {
+      state.loading = true;
+    },
+    finishLoading(state) {
+      state.loading = false;
     }
   },
   modules: {

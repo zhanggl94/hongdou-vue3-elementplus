@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-07 17:01:58
+ * @LastEditTime: 2021-07-08 11:03:47
 -->
 <template>
   <div class="form-box">
@@ -18,8 +18,6 @@
       <el-form-item label="备注">
         <el-input type="textarea" :rows="3" v-model="form.note" class="large-input"></el-input>
       </el-form-item>
-      <el-button type="primary">确定</el-button>
-      <el-button>取消</el-button>
     </el-form>
   </div>
 </template>
