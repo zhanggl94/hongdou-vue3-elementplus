@@ -4,13 +4,14 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-08 16:10:36
+ * @LastEditTime: 2021-07-08 17:25:50
  */
 import axios from 'axios'
 import baseurl from '../api/base'
 import routerPath from '../router/path'
 import store from '../store'
 import router from '../router'
+import { ElMessage } from 'element-plus'
 
 axios.defaults.timeout = 2000 * 10 // 请求超时时间
 axios.defaults.headers.post['Content-Type'] = 'application/json' // 请求头
@@ -51,21 +52,22 @@ const errHandle = (status, other) => {
     switch (status) {
         // 未登录，跳转到登陆页面
         case 401:
-            this.$message.err('请登陆')
+            ElMessage.error('请登陆')
             toRouter(routerPath.signin)
             break
         // 权限不足
         case 403:
-            this.$message.err('权限不足')
+            ElMessage.error('权限不足')
             toRouter(routerPath.to403)
             break;
         // 404请求不存在
         case 404:
-            this.$message.err('页面不存在')
+            ElMessage.error('页面不存在')
             toRouter(routerPath.to404)
             break;
         default:
-            this.$message.err(other)
+            // ElMessage.error(other)
+            console.error(other)
     }
 }
 
