@@ -4,12 +4,13 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-08 15:45:17
+ * @LastEditTime: 2021-07-09 14:53:06
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import routePath from './path'
+// import { getToken } from '../utils/utils'
 
 const routes = [
   {
@@ -66,7 +67,7 @@ const routes = [
     ]
   },
   {
-    path: routePath.singin,
+    path: routePath.signin,
     name: 'Signin',
     meta: {
       title: '登录'
@@ -80,5 +81,17 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+// TOOD 路由拦截器：页面没有Token时，需要跳转到登陆页
+// router.beforeEach((to, from, next) => {
+//   // 
+//   if (to.fullPath !== routePath.signin && to.fullPath !== routePath.signup && !getToken()) {
+//     router.push({
+//       path: routePath.signin,
+//     })
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

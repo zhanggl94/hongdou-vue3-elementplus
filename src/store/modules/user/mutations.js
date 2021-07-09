@@ -11,22 +11,7 @@ import userMUTypes from './mutation-types'
 
 export default {
   [userMUTypes.SET_USERINFO](state, data) {
-    this.commit(userMUTypes.SET_USERNAME, data.username)
-    this.commit(userMUTypes.SET_TOKEN, data.token)
+    state.id = data.id
+    state.username = data.username
   },
-  [userMUTypes.SET_USERNAME](state, username) {
-    state.username = username
-    localStorage.setItem('username', username)
-  },
-  [userMUTypes.SET_TOKEN](state, token) {
-    state.token = token
-    localStorage.setItem('token', token)
-  },
-  [userMUTypes.CLEAR_USERINFO](state) {
-    if (state) {
-      state = null;
-    }
-    localStorage.removeItem('username')
-    localStorage.removeItem('token')
-  }
 }

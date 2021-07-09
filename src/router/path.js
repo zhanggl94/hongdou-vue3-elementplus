@@ -13,6 +13,6 @@ export default {
     billtype: '/billtype', // 账单类型
     to403: '/403', // 没有权限
     to404: '/404', // 找不到页面
-    singin: '/signin', // 登陆
-    singup: '/signup', // 注册
+    signin: '/signin', // 登陆
+    signup: '/signup', // 注册
 }

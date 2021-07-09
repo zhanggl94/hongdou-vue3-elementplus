@@ -10,5 +10,4 @@
 export default {
   id: '',
   username: '',
-  token: ''
 }

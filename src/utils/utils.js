@@ -7,28 +7,14 @@
  * @LastEditTime: 2021-07-06 17:59:31
  */
 
-/**
- * 用户名称校验
- * @param {*} rule
- * @param {*} value
- * @param {*} cb
- * @returns
- */
-export const validateUsername = (rule, value, cb) => {
-  if (!value) {
-    return cb(new Error('用户名不能为空'))
-  }
+export const setToken = (token) => {
+  localStorage.setItem('token', token)
 }
 
-/**
- * 密码校验
- * @param {*} rule
- * @param {*} value
- * @param {*} cb
- * @returns
- */
-export const validatePassword = (rule, value, cb) => {
-  if (!value) {
-    return cb(new Error('密码不能为空'))
-  }
+export const getToken = () => {
+  localStorage.getItem('token')
+}
+
+export const clearToken = () => {
+  localStorage.removeItem('token')
 }
