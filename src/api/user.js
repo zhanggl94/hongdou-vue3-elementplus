@@ -10,6 +10,9 @@ import base from './base'
 import axios from '../request/axios'
 
 export default {
-    signin: (param) => axios.post(base.management + base.signin, JSON.stringify(param))
+  // 登录
+  signin: (params) => axios.post(base.management + base.signin, JSON.stringify(params)),
 
+  // 注册
+  signup: (params) => axios.post(base.management + base.signup, JSON.stringify(params))
 }

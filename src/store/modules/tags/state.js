@@ -8,5 +8,5 @@
  */
 
 export default {
-    tagList: []
+  tagList: []
 }

@@ -7,6 +7,6 @@
  * @LastEditTime: 2021-07-08 16:32:30
  */
 export default {
-    SIGNIN: 'SIGNIN', // 登陆
-    SIGNOUT: 'SIGNOUT', // 注册
+  SIGNIN: 'SIGNIN', // 登陆
+  SIGNUP: 'SIGNUP', // 注册   
 }

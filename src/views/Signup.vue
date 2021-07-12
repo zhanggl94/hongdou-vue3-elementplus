@@ -57,22 +57,19 @@
 </template>
 
 <script>
-// import userACTypes from '../store/modules/user/action-types'
+import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
-// import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 export default {
   components: {
-    vGitHub,
+    vGitHub
   },
   data() {
     // 用户名校验
     const validateUsername = (rule, value, callback) => {
-      if (value.trim()) {
-        callback()
-      } else {
-        callback(new Error('请输入用户名'))
-      }
+      if (value.trim()) callback()
+      else callback(new Error('请输入用户名'))
     }
     // 密码校验
     const validatePassword = (rule, value, callback) => {
@@ -93,28 +90,28 @@ export default {
       formInfo: {
         username: '',
         password: '',
-        confirmPassword: '',
+        confirmPassword: ''
       },
       rules: {
         username: [
           {
             validator: validateUsername,
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         password: [
           {
             validator: validatePassword,
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         confirmPassword: [
           {
             validator: validateConfirmPassword,
-            trigger: 'blur',
-          },
-        ],
-      },
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -123,15 +120,26 @@ export default {
       this.$refs[formName].resetFields()
     },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          console.log('submit')
+          try {
+            const result = await this.$store.dispatch(
+              userACTypes.SIGNUP,
+              this.formInfo
+            )
+            if (result.data.isOK)
+              ElMessage.success('欢迎登录 ' + this.$store.user.username)
+            else ElMessage.warning(result.data.message)
+          } catch (err) {
+            console.log('catch', err)
+            ElMessage.error(err.data.message)
+          }
         } else {
           console.log('some error')
         }
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

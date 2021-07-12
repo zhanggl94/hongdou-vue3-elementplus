@@ -7,22 +7,38 @@
  * @LastEditTime: 2021-07-12 13:39:37
  */
 
-import mutationTYpes from './mutation-types'
+import mutationTypes from './mutation-types'
 import actionTypes from './action-types'
 import user from '../../../api/user'
 
 export default {
-    async [actionTypes.SIGNIN]({ commit }, params) {
-        return new Promise((resolve, reject) => {
-            user.signin(params)
-                .then(result => {
-                    if (result?.data?.data) {
-                        commit(mutationTYpes.SET_USERINFO, result.data.data)
-                    }
-                    resolve(result)
-                }).catch(err => {
-                    reject(err)
-                })
+  // 登录
+  async [actionTypes.SIGNIN]({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      user.signin(params)
+        .then(result => {
+          if (result?.data?.data)
+            commit(mutationTypes.SET_USERINFO, result.data.data)
+          resolve(result)
+        }).catch(err => {
+          reject(err)
         })
-    },
+    })
+  },
+
+  // 注册
+  async [actionTypes.SIGNUP]({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      user.signup(params)
+        .then(result => {
+          if (result?.data?.data)
+            commit(mutationTypes.SET_USERINFO, result.data.data)
+          resolve(result)
+        })
+        .catch(err => {
+          console.log('signup err', err)
+          reject(err)
+        })
+    })
+  }
 }
