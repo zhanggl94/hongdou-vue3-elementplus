@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-12 14:43:37
+ * @LastEditTime: 2021-07-12 15:00:24
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -79,6 +79,16 @@ const routes = [
     },
     component: () =>
       import(/* webpackChunkName: "Signin" */ '../views/Signin.vue')
+  },
+  {
+    path: routePath.signup,
+    name: 'Signup',
+    meta: {
+      title: '注册',
+      needSignin: false,
+    },
+    component: () =>
+      import(/* webpackChunkName: "Signup" */ '../views/Signup.vue')
   }
 ]
 

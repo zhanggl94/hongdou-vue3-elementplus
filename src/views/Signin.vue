@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-12 14:41:24
+ * @LastEditTime: 2021-07-12 17:19:48
 -->
 
 <template>
@@ -15,9 +15,9 @@
       </div>
     </div>
     <div class="sign-form">
-      <el-form ref="loginForm" :model="formInfo" :rules="rules">
+      <el-form ref="signinForm" :model="formInfo" :rules="rules">
         <el-form-item prop="username">
-          <el-input v-model="formInfo.username" placeholder="username" @keydown.enter="submitForm('loginForm')">
+          <el-input v-model="formInfo.username" placeholder="username" @keydown.enter="submitForm('signinForm')">
             <template #prepend>
               <el-tooltip effect="dark" content="用户名" placement="left">
                 <el-button icon="el-icon-user"></el-button>
@@ -26,7 +26,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" v-model="formInfo.password" @keydown.enter="submitForm('loginForm')">
+          <el-input type="password" v-model="formInfo.password" @keydown.enter="submitForm('signinForm')">
             <template #prepend>
               <el-tooltip effect="dark" content="密码" placement="left">
                 <el-button icon="el-icon-lock"></el-button>
@@ -36,17 +36,21 @@
         </el-form-item>
         <el-from-item>
           <div class="sign-submit">
-            <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-            <el-button @click="resetForm('loginForm')">重置</el-button>
+            <el-button type="primary" @click="submitForm('signinForm')">登录</el-button>
+            <el-button @click="resetForm('signinForm')">重置</el-button>
           </div>
         </el-from-item>
       </el-form>
+    </div>
+    <div class='signup'>
+      <div>
+        没有账号？<router-link to='/signup'>注册</router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import userMUTypes from '../store/modules/user/mutation-types'
 import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
 import { ElMessage } from 'element-plus'
@@ -128,6 +132,7 @@ export default {
   height: 200px;
 }
 .sign-form {
+  width: 295px;
   padding: 20px;
   margin: 20px;
   background-color: #f6f8fa;
@@ -141,6 +146,15 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+}
+.signup {
+  border: 1px solid #d1d5da;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  width: 295px;
+  display: flex;
   justify-content: center;
 }
 </style>

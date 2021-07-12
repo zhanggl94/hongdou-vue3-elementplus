@@ -17,7 +17,8 @@ body {
 }
 
 a {
-    text-decoration: none
+    text-decoration: none;
+    color: #0366D6;
 }
 
 
@@ -89,7 +90,6 @@ a {
 }
 
 /*BaseForm*/
-
 .form-box {
     display: flex;
     justify-content: center;
@@ -118,7 +118,6 @@ a {
 }
 
 /*Upload*/
-
 .pure-button {
     width: 150px;
     height: 40px;
@@ -163,7 +162,6 @@ a {
 }
 
 /*VueEditor*/
-
 .ql-container {
     min-height: 400px;
 }
@@ -177,7 +175,6 @@ a {
 }
 
 /*markdown*/
-
 .v-note-wrapper .v-note-panel {
     min-height: 500px;
 }
