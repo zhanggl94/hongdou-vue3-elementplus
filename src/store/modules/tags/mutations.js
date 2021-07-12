@@ -20,7 +20,6 @@ export default {
         state.tagList = [];
     },
     [tagsMUTypes.CLOSE_OTHERS](state, data) {
-        console.log('data', data)
         state.tagList = state.tagList.filter(item => item.path === data.path)
     }
 }

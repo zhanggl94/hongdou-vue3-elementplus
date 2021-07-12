@@ -4,13 +4,13 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-09 14:53:06
+ * @LastEditTime: 2021-07-12 14:43:37
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import routePath from './path'
-// import { getToken } from '../utils/utils'
+import { getToken } from '../utils/utils'
 
 const routes = [
   {
@@ -26,7 +26,8 @@ const routes = [
         path: routePath.dashboard,
         name: 'Dashboard',
         meta: {
-          title: '主页'
+          title: '主页',
+          needSignin: true,
         },
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue')
       },
@@ -34,7 +35,8 @@ const routes = [
         path: routePath.message,
         name: 'Message',
         meta: {
-          title: '消息'
+          title: '消息',
+          needSignin: true,
         },
         component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
       },
@@ -42,7 +44,8 @@ const routes = [
         path: routePath.billtype,
         name: 'BillType',
         meta: {
-          title: '账单类型'
+          title: '账单类型',
+          needSignin: true,
         },
         component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/billtype/BillType.vue')
       },
@@ -50,7 +53,8 @@ const routes = [
         path: routePath.to403,
         name: '403',
         meta: {
-          title: '没有权限'
+          title: '没有权限',
+          needSignin: true,
         },
         component: () => import(/* webpackChunkName: "403" */
           '../views/403.vue')
@@ -70,7 +74,8 @@ const routes = [
     path: routePath.signin,
     name: 'Signin',
     meta: {
-      title: '登录'
+      title: '登录',
+      needSignin: false,
     },
     component: () =>
       import(/* webpackChunkName: "Signin" */ '../views/Signin.vue')
@@ -82,16 +87,18 @@ const router = createRouter({
   routes
 })
 
-// TOOD 路由拦截器：页面没有Token时，需要跳转到登陆页
-// router.beforeEach((to, from, next) => {
-//   // 
-//   if (to.fullPath !== routePath.signin && to.fullPath !== routePath.signup && !getToken()) {
-//     router.push({
-//       path: routePath.signin,
-//     })
-//   } else {
-//     next()
-//   }
-// })
+// 路由拦截器：
+router.beforeEach((to, from, next) => {
+  if (to.meta.needSignin && !getToken()) { // 页面没有Token时，需要跳转到登陆页
+    router.push({
+      path: routePath.signin,
+      query: {
+        redirect: to.fullPath // 登录后跳转到该页面
+      }
+    })
+  } else {
+    next()
+  }
+})
 
 export default router

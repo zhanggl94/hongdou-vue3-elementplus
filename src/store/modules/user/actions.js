@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 16:31:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-09 16:14:56
+ * @LastEditTime: 2021-07-12 13:39:37
  */
 
 import mutationTYpes from './mutation-types'
@@ -13,24 +13,16 @@ import user from '../../../api/user'
 
 export default {
     async [actionTypes.SIGNIN]({ commit }, params) {
-        try {
-            const result = await user.signin(params)
-            if (result?.data?.data) {
-                commit(mutationTYpes.SET_USERINFO, result.data.data)
-            }
-            return result;
-            // user.signin(params)
-            // .then(data=>{
-            //     if (data?.data?.data) {
-            //         commit(mutationTYpes.SET_USERINFO, data.data.data)
-            //     }
-            // })
-            // .catch(err=>{
-            //     console.error(err)
-            // })
-        } catch (error) {
-            console.error(error)
-            throw error
-        }
+        return new Promise((resolve, reject) => {
+            user.signin(params)
+                .then(result => {
+                    if (result?.data?.data) {
+                        commit(mutationTYpes.SET_USERINFO, result.data.data)
+                    }
+                    resolve(result)
+                }).catch(err => {
+                    reject(err)
+                })
+        })
     },
 }

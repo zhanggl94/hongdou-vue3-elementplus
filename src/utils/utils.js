@@ -4,17 +4,11 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 22:18:42
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-06 17:59:31
+ * @LastEditTime: 2021-07-12 14:22:01
  */
 
-export const setToken = (token) => {
-  localStorage.setItem('token', token)
-}
+export const setToken = (token) => localStorage.setItem('token', token)
 
-export const getToken = () => {
-  localStorage.getItem('token')
-}
+export const getToken = () => localStorage.getItem('token')
 
-export const clearToken = () => {
-  localStorage.removeItem('token')
-}
+export const clearToken = () => localStorage.removeItem('token')

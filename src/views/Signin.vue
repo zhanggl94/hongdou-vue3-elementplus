@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-09 15:26:16
+ * @LastEditTime: 2021-07-12 14:41:24
 -->
 
 <template>
@@ -74,15 +74,22 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           try {
-            await this.$store.dispatch(userACTypes.SIGNIN, {
+            const result = await this.$store.dispatch(userACTypes.SIGNIN, {
               username: this.formInfo.username,
               password: this.formInfo.password,
             }) // 登录
-            ElMessage.success('欢迎登录 ' + this.$store.state.user.username)
-            this.$router.push('/')
+            if (result?.data?.isOk) {
+              ElMessage.success('欢迎登录 ' + this.$store.state.user.username)
+              if (this.$route.query.redirect) {
+                this.$router.push(this.$route.query.redirect)
+              } else {
+                this.$router.push('/')
+              }
+            } else {
+              ElMessage.warning(result.data.message)
+            }
           } catch (err) {
-            ElMessage.error(err.message)
-            return false
+            console.error(err)
           }
         } else {
           return false
