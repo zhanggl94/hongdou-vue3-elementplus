@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-09 17:44:08
+ * @LastEditTime: 2021-07-13 09:49:39
  */
 
 import axios from 'axios'
@@ -22,7 +22,7 @@ axios.interceptors.request.use(config => {
     showLoading()
     console.log('axios interceptors config: ', config)
     // 登录或者注册时，不传递Token
-    if (!config.url.endsWith(baseurl.signin) && !config.url.endsWith(baseurl.signin)) {
+    if (!config.url.endsWith(baseurl.signin) && !config.url.endsWith(baseurl.signup)) {
         axios.headers['Authorization'] = getToken() // Token
     }
     return config
@@ -70,9 +70,9 @@ const errHandle = (status, other) => {
             } else {
                 ElMessage.error('请登陆')
             }
-            setTimeout(() => {
-                toRouter(routerPath.signin)
-            }, 1000);
+            // setTimeout(() => {
+            //     toRouter(routerPath.signin)
+            // }, 1000);
             break
         // 权限不足
         case 403:

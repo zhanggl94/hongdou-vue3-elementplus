@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-12 14:59:12
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-12 17:49:01
+ * @LastEditTime: 2021-07-13 09:50:36
 -->
 <template>
   <div class="sign-container">
@@ -63,7 +63,7 @@ import { ElMessage } from 'element-plus'
 
 export default {
   components: {
-    vGitHub
+    vGitHub,
   },
   data() {
     // 用户名校验
@@ -90,28 +90,28 @@ export default {
       formInfo: {
         username: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
       },
       rules: {
         username: [
           {
             validator: validateUsername,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         password: [
           {
             validator: validatePassword,
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         confirmPassword: [
           {
             validator: validateConfirmPassword,
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   methods: {
@@ -120,26 +120,30 @@ export default {
       this.$refs[formName].resetFields()
     },
     submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           try {
             const result = await this.$store.dispatch(
               userACTypes.SIGNUP,
               this.formInfo
             )
-            if (result.data.isOK)
-              ElMessage.success('欢迎登录 ' + this.$store.user.username)
-            else ElMessage.warning(result.data.message)
+            if (result.data.isOk) {
+              ElMessage.success('欢迎登录 ' + this.$store.state.user.username)
+              if (this.$route.query.redirect) {
+                this.$router.push(this.$route.query.redirect)
+              } else {
+                this.$router.push('/')
+              }
+            } else ElMessage.warning(result.data.message)
           } catch (err) {
-            console.log('catch', err)
-            ElMessage.error(err.data.message)
+            console.error(err)
           }
         } else {
-          console.log('some error')
+          console.log('验证失败')
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

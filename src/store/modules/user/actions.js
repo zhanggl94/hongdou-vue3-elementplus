@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 16:31:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-12 13:39:37
+ * @LastEditTime: 2021-07-13 09:40:04
  */
 
 import mutationTypes from './mutation-types'
@@ -31,7 +31,7 @@ export default {
     return new Promise((resolve, reject) => {
       user.signup(params)
         .then(result => {
-          if (result?.data?.data)
+          if (result?.data?.isOk)
             commit(mutationTypes.SET_USERINFO, result.data.data)
           resolve(result)
         })
