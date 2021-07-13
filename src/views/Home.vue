@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-30 18:02:38
+ * @LastEditTime: 2021-07-13 11:22:45
 -->
 
 <template>
@@ -32,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import vHeader from '../components/Header.vue'
+import vHeader from '../components/header/Header'
 import vSidebar from '../components/Sidebar.vue'
 import vTags from '../components/Tags'
 

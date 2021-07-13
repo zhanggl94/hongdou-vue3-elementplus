@@ -4,13 +4,14 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-12 15:00:24
+ * @LastEditTime: 2021-07-13 10:35:32
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import routePath from './path'
 import { getToken } from '../utils/utils'
+import store from '../store'
 
 const routes = [
   {
@@ -99,7 +100,7 @@ const router = createRouter({
 
 // 路由拦截器：
 router.beforeEach((to, from, next) => {
-  if (to.meta.needSignin && !getToken()) { // 页面没有Token时，需要跳转到登陆页
+  if (to.meta.needSignin && (!getToken() || !store.state.user.username || !store.state.user.id)) { // 页面没有Token或者用户名ID为空时，需要跳转到登陆页
     router.push({
       path: routePath.signin,
       query: {

@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 09:49:39
+ * @LastEditTime: 2021-07-13 09:52:19
  */
 
 import axios from 'axios'
@@ -68,7 +68,7 @@ const errHandle = (status, other) => {
             if (other) {
                 ElMessage.error(other)
             } else {
-                ElMessage.error('请登陆')
+                ElMessage.error('请登录')
             }
             // setTimeout(() => {
             //     toRouter(routerPath.signin)

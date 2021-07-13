@@ -8,6 +8,6 @@
  */
 
 export default {
-  id: '',
-  username: '',
+  id: localStorage.getItem('id') || '',
+  username: localStorage.getItem('username') || '',
 }

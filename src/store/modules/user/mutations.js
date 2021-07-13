@@ -14,10 +14,14 @@ export default {
   [userMUTypes.SET_USERINFO](state, data) {
     state.id = data.id
     state.username = data.username
+    localStorage.setItem('id', state.id)
+    localStorage.setItem('username', state.username)
   },
   [userMUTypes.CLEAR_USERINFO](state) {
     state.id = ''
     state.username = ''
     removeToken()
+    localStorage.removeItem('id')
+    localStorage.removeItem('username')
   }
 }

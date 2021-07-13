@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-12 14:59:12
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 09:50:36
+ * @LastEditTime: 2021-07-13 18:05:58
 -->
 <template>
   <div class="sign-container">
@@ -60,32 +60,13 @@
 import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
 import { ElMessage } from 'element-plus'
+import { validateNull, validateConfirmPassword } from '../utils/utils'
 
 export default {
   components: {
     vGitHub,
   },
   data() {
-    // 用户名校验
-    const validateUsername = (rule, value, callback) => {
-      if (value.trim()) callback()
-      else callback(new Error('请输入用户名'))
-    }
-    // 密码校验
-    const validatePassword = (rule, value, callback) => {
-      if (!value.trim()) callback(new Error('请输入密码'))
-      callback()
-    }
-    // 两次输入密码校验
-    const validateConfirmPassword = (rule, value, callback) => {
-      if (!value.trim()) {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.formInfo.password) {
-        callback(new Error('两次输入密码不一致'))
-      }
-      callback()
-    }
-
     return {
       formInfo: {
         username: '',
@@ -95,19 +76,19 @@ export default {
       rules: {
         username: [
           {
-            validator: validateUsername,
+            validator: validateNull.bind(this,'请输入用户名'),
             trigger: 'blur',
           },
         ],
         password: [
           {
-            validator: validatePassword,
+            validator: validateNull.bind(this,'请输入密码'),
             trigger: 'blur',
           },
         ],
         confirmPassword: [
           {
-            validator: validateConfirmPassword,
+            validator: validateConfirmPassword.bind(this,this.formInfo),
             trigger: 'blur',
           },
         ],

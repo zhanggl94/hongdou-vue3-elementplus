@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-06-21 16:53:53
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-30 17:07:41
+ * @LastEditTime: 2021-07-13 15:20:45
 -->
 
 <template>
@@ -20,15 +20,11 @@
     <div class="user">
       <!-- 消息中心 -->
       <div class="user-col bell">
-        <el-tooltip
-          effect="dark"
-          :content="
+        <el-tooltip effect="dark" :content="
             unReadMessageList.length
               ? `有${unReadMessageList.length}条消息`
               : '消息中心'
-          "
-          placement="bottom"
-        >
+          " placement="bottom">
           <router-link class="bell-link" to="/message">
             <i class="el-icon-bell"></i>
           </router-link>
@@ -37,7 +33,7 @@
       </div>
       <!-- 用户头像 -->
       <div class="avatar">
-        <img src="../assets/img/img.jpg" />
+        <img src="../../assets/img/img.jpg" />
       </div>
       <!-- 用户下拉菜单 -->
       <div class="user-col">
@@ -48,6 +44,7 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
+              <el-dropdown-item command="changeuserinfo">修改用户信息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -57,22 +54,24 @@
         <v-git-hub></v-git-hub>
       </div>
     </div>
+    <v-modify-user ref="modifyUser"></v-modify-user>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import userMUTypes from '../store/modules/user/mutation-types'
-import vGitHub from './GitHubRepository.vue'
+import userMUTypes from '../../store/modules/user/mutation-types'
+import vGitHub from '../GitHubRepository'
+import vModifyUser from '../header/ModifyUser'
 
 export default {
   components: {
     vGitHub,
+    vModifyUser,
   },
   data() {
     return {
-      // username: this.$store.state.user.username,
-      username: localStorage.getItem('username'),
+      username: this.$store.state.user.username,
     }
   },
   computed: {
@@ -82,7 +81,9 @@ export default {
   methods: {
     ...mapMutations(['changeCollapse']),
     handleUserCommand(command) {
-      if (command === 'logout') {
+      if (command === 'changeuserinfo') {
+        this.$refs.modifyUser.openUserInfo()
+      } else if (command === 'logout') {
         this.$store.commit(userMUTypes.CLEAR_USERINFO)
         this.$router.push('/signin')
       }
