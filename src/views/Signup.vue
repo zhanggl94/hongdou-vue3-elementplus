@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-12 14:59:12
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 18:05:58
+ * @LastEditTime: 2021-07-14 11:00:37
 -->
 <template>
   <div class="sign-container">
@@ -60,13 +60,20 @@
 import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
 import { ElMessage } from 'element-plus'
-import { validateNull, validateConfirmPassword } from '../utils/utils'
+import { validateNull } from '../utils/utils'
 
 export default {
   components: {
     vGitHub,
   },
   data() {
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (value.trim() === '') callback(new Error('请再次输入新密码'))
+      else if (value !== this.formInfo.password)
+        callback(new Error('两次输入密码不一致'))
+      callback()
+    }
+    
     return {
       formInfo: {
         username: '',
@@ -76,19 +83,19 @@ export default {
       rules: {
         username: [
           {
-            validator: validateNull.bind(this,'请输入用户名'),
+            validator: validateNull.bind(this, '请输入用户名'),
             trigger: 'blur',
           },
         ],
         password: [
           {
-            validator: validateNull.bind(this,'请输入密码'),
+            validator: validateNull.bind(this, '请输入密码'),
             trigger: 'blur',
           },
         ],
         confirmPassword: [
           {
-            validator: validateConfirmPassword.bind(this,this.formInfo),
+            validator: validateConfirmPassword,
             trigger: 'blur',
           },
         ],

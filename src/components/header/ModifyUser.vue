@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-13 10:39:55
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 18:02:16
+ * @LastEditTime: 2021-07-14 10:53:54
 -->
 <template>
   <div>
@@ -33,10 +33,16 @@
 </template>
 
 <script>
-import { validateNull, validateConfirmPassword } from '../../utils/utils'
+import { validateNull } from '../../utils/utils'
 
 export default {
   data() {
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (value.trim() === '') callback(new Error('请再次输入新密码'))
+      else if (value !== this.userInfo.newPassword)
+        callback(new Error('两次输入密码不一致'))
+      callback()
+    }
     return {
       dialogVisible: false,
       userInfo: {
@@ -59,7 +65,7 @@ export default {
         ],
         confirmNewPassword: [
           {
-            validator: validateConfirmPassword.bind(this, this.userInfo.newPassword),
+            validator: validateConfirmPassword,
             trigger: 'blur',
           },
         ],
