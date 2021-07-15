@@ -8,5 +8,6 @@
  */
 export default {
   SIGNIN: 'SIGNIN', // 登陆
-  SIGNUP: 'SIGNUP', // 注册   
+  SIGNUP: 'SIGNUP', // 注册
+  EDIT: 'EDIT',// 编辑
 }

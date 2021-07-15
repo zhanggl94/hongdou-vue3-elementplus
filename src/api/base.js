@@ -12,4 +12,5 @@ export default {
     management: '/api', // 开发环境下，启用跨域时的baseurl
     signin: '/signin', // 登陆
     signup: '/signup', // 注册
+    userEdit:'/user/edit', // 修改用户信息
 }

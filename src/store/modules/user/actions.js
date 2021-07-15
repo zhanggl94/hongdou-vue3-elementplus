@@ -13,7 +13,7 @@ import user from '../../../api/user'
 
 export default {
   // 登录
-  async [actionTypes.SIGNIN]({ commit }, params) {
+  [actionTypes.SIGNIN]({ commit }, params) {
     return new Promise((resolve, reject) => {
       user.signin(params)
         .then(result => {
@@ -27,7 +27,7 @@ export default {
   },
 
   // 注册
-  async [actionTypes.SIGNUP]({ commit }, params) {
+  [actionTypes.SIGNUP]({ commit }, params) {
     return new Promise((resolve, reject) => {
       user.signup(params)
         .then(result => {
@@ -39,6 +39,15 @@ export default {
           console.log('signup err', err)
           reject(err)
         })
+    })
+  },
+
+  // 编辑
+  [actionTypes.EDIT](context, params) {
+    return new Promise((resolve, reject) => {
+      user.edit(params)
+        .then(result => resolve(result))
+        .catch(err => reject(err))
     })
   }
 }

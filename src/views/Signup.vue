@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     resetForm(formName) {
-      console.log(this.$refs)
       this.$refs[formName].resetFields()
     },
     submitForm(formName) {

@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 09:52:19
+ * @LastEditTime: 2021-07-15 17:56:20
  */
 
 import axios from 'axios'
@@ -23,7 +23,7 @@ axios.interceptors.request.use(config => {
     console.log('axios interceptors config: ', config)
     // 登录或者注册时，不传递Token
     if (!config.url.endsWith(baseurl.signin) && !config.url.endsWith(baseurl.signup)) {
-        axios.headers['Authorization'] = getToken() // Token
+        config.headers['jwttoken'] = getToken() // Token
     }
     return config
 }, error => Promise.error(error))

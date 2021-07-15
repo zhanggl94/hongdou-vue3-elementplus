@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-13 10:39:55
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-14 10:53:54
+ * @LastEditTime: 2021-07-15 17:50:26
 -->
 <template>
   <div>
@@ -24,7 +24,7 @@
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary">确定</el-button>
+          <el-button type="primary" @click="submitForm('userInfoForm')">确定</el-button>
           <el-button @click="closeUserInfo">取消</el-button>
         </span>
       </template>
@@ -33,7 +33,10 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
 import { validateNull } from '../../utils/utils'
+import userACTypes from '../../store/modules/user/action-types'
+import userMUTypes from '../../store/modules/user/mutation-types'
 
 export default {
   data() {
@@ -79,6 +82,37 @@ export default {
     closeUserInfo() {
       this.dialogVisible = false
     },
+    submitForm(userInfoForm) {
+      this.$refs[userInfoForm].validate(async (valid) => {
+        if (valid) {
+          try {
+            const result = await this.$store.dispatch(userACTypes.EDIT, {
+              ...this.userInfo,
+              id: this.$store.state.user.id,
+              username: this.$store.state.user.username,
+            })
+            if (result.data.isOk) {
+              ElMessage.success('密码修改成功，请重新登录')
+              this.$store.commit(userMUTypes.CLEAR_USERINFO)
+              this.$router.push('/signin')
+            } else {
+              ElMessage.warning(result.data.message)
+            }
+          } catch (err) {
+            console.error(err)
+          }
+        } else {
+          ElMessage.warning('验证失败')
+        }
+      })
+    },
+    clearForm() {
+      
+    },
+  },
+  created() {
+    this.$refs['userInfoForm'].resetFields()
+    // this.clearForm()
   },
 }
 </script>

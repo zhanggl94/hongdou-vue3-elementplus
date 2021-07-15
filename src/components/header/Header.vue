@@ -45,7 +45,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="changeuserinfo">修改用户信息</el-dropdown-item>
-              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item command="signout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -83,7 +83,7 @@ export default {
     handleUserCommand(command) {
       if (command === 'changeuserinfo') {
         this.$refs.modifyUser.openUserInfo()
-      } else if (command === 'logout') {
+      } else if (command === 'signout') {
         this.$store.commit(userMUTypes.CLEAR_USERINFO)
         this.$router.push('/signin')
       }

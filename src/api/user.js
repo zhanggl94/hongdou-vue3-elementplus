@@ -14,5 +14,8 @@ export default {
   signin: (params) => axios.post(base.management + base.signin, JSON.stringify(params)),
 
   // 注册
-  signup: (params) => axios.post(base.management + base.signup, JSON.stringify(params))
+  signup: (params) => axios.post(base.management + base.signup, JSON.stringify(params)),
+
+  // 编辑
+  edit: (params) => axios.post(base.management + base.userEdit, JSON.stringify(params)),
 }
