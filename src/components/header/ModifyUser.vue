@@ -4,11 +4,11 @@
  * @Autor: zhanggl
  * @Date: 2021-07-13 10:39:55
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-15 17:50:26
+ * @LastEditTime: 2021-07-16 10:54:05
 -->
 <template>
   <div>
-    <el-dialog title="修改用户信息" v-model="dialogVisible" width="40%">
+    <el-dialog title="修改用户信息" v-model="dialogVisible" width="40%" @close="closeUserInfo('userInfoForm')">
       <div class="form-box">
         <el-form ref="userInfoForm" :model="userInfo" label-width="100px" :rules="rules">
           <el-form-item label="原密码" prop="oldPassword">
@@ -25,7 +25,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="submitForm('userInfoForm')">确定</el-button>
-          <el-button @click="closeUserInfo">取消</el-button>
+          <el-button @click="closeUserInfo('userInfoForm')">取消</el-button>
         </span>
       </template>
     </el-dialog>
@@ -79,11 +79,12 @@ export default {
     openUserInfo() {
       this.dialogVisible = true
     },
-    closeUserInfo() {
+    closeUserInfo(formName) {
       this.dialogVisible = false
+      this.$refs[formName].resetFields()
     },
-    submitForm(userInfoForm) {
-      this.$refs[userInfoForm].validate(async (valid) => {
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           try {
             const result = await this.$store.dispatch(userACTypes.EDIT, {
@@ -92,6 +93,7 @@ export default {
               username: this.$store.state.user.username,
             })
             if (result.data.isOk) {
+              this.$refs[formName].resetFields()
               ElMessage.success('密码修改成功，请重新登录')
               this.$store.commit(userMUTypes.CLEAR_USERINFO)
               this.$router.push('/signin')
@@ -106,13 +108,6 @@ export default {
         }
       })
     },
-    clearForm() {
-      
-    },
-  },
-  created() {
-    this.$refs['userInfoForm'].resetFields()
-    // this.clearForm()
   },
 }
 </script>
