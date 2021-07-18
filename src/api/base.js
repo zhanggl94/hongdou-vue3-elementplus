@@ -13,4 +13,10 @@ export default {
     signin: '/signin', // 登陆
     signup: '/signup', // 注册
     userEdit:'/user/edit', // 修改用户信息
+    billtype:{ // 账单类型
+      create:'/billtype/create',
+      edit:'/billtype/edit',
+      delete:'/billtype/delete',
+      select:'/billtype/select'
+    }
 }

@@ -11,6 +11,7 @@ import { Store } from 'vuex'
 import user from './modules/user'
 import message from './modules/message'
 import tags from './modules/tags'
+import billtype from './modules/billtype'
 
 export default new Store({
   state: {
@@ -32,5 +33,6 @@ export default new Store({
     user,
     message,
     tags,
+    billtype,
   }
 })

@@ -32,17 +32,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="dialog-box">
-      <el-dialog title="账单类型详情" v-model="dialogVisible" width="40%">
-        <v-bill-type-detail></v-bill-type-detail>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button type="primary" @click="openDialog">确定</el-button>
-            <el-button @click="closeDialog">取消</el-button>
-          </span>
-        </template>
-      </el-dialog>
-    </div>
+    <v-bill-type-detail @click=openDialog></v-bill-type-detail>
   </div>
 </template>
 
@@ -54,11 +44,10 @@ export default {
     return {
       billTypeList: [],
       multipleSelection: [],
-      dialogVisible: false,
     }
   },
   components: {
-    vBillTypeDetail,
+    vBillTypeDetail
   },
   created() {
     this.billTypeList = this.getBillTypeList()
@@ -70,7 +59,7 @@ export default {
         { id: '1', order: 1, type: '洗车', note: '洗车note' },
         { id: '2', order: 2, type: '保险', note: '保险note' },
         { id: '3', order: 3, type: '罚款', note: '罚款note' },
-        { id: '4', order: 4, type: '停车费', note: '停车费note' },
+        { id: '4', order: 4, type: '停车费', note: '停车费note' }
       ]
     },
     // 编辑单条
@@ -83,14 +72,14 @@ export default {
       this.$confirm('确定要删除吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       })
         .then(() => {
           console.log('row', row)
           this.billTypeList.splice(index, 1)
           this.$message.success('删除成功')
         })
-        .catch((err) => {
+        .catch(err => {
           this.$message.info('取消删除')
           console.error(err)
         })
@@ -108,7 +97,7 @@ export default {
       this.$confirm('确定要删除选中内容吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       })
         .then(() => {
           let deleteType = ''
@@ -116,24 +105,20 @@ export default {
           for (let item of this.multipleSelection) {
             deleteType += item.type + ' '
             this.billTypeList.splice(
-              this.billTypeList.findIndex((t) => t.id === item.id),
+              this.billTypeList.findIndex(t => t.id === item.id),
               1
             )
           }
           this.$message.success(deleteType + '被删除成功')
         })
-        .catch((err) => {
+        .catch(err => {
           this.$message.info('取消删除')
           console.error(err)
         })
     },
-    closeDialog() {
-      this.dialogVisible = false
-    },
     openDialog() {
-      this.closeDialog()
-    },
-  },
+    }
+  }
 }
 </script>
 
