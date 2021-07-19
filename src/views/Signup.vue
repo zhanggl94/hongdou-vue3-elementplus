@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-12 14:59:12
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-14 11:00:37
+ * @LastEditTime: 2021-07-19 17:47:57
 -->
 <template>
   <div class="sign-container">
@@ -20,29 +20,14 @@
       <el-form ref="signupForm" :model="formInfo" :rules="rules" label-width="100px">
         <el-form-item prop="username" label="用户名">
           <el-input v-model="formInfo.username" placeholder="username" @keydown.enter="submitForm('signupForm')">
-            <!-- <template #prepend>
-              <el-tooltip effect="dark" content="用户名" placement="left">
-                <el-button icon="el-icon-user"></el-button>
-              </el-tooltip>
-            </template> -->
           </el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
           <el-input type="password" v-model="formInfo.password" @keydown.enter="submitForm('signupForm')">
-            <!-- <template #prepend>
-              <el-tooltip effect="dark" content="密码" placement="left">
-                <el-button icon="el-icon-lock"></el-button>
-              </el-tooltip>
-            </template> -->
           </el-input>
         </el-form-item>
         <el-form-item prop="confirmPassword" label="确认密码">
           <el-input type="password" v-model="formInfo.confirmPassword" @keydown.enter="submitForm('signupForm')">
-            <!-- <template #prepend>
-              <el-tooltip effect="dark" content="再次输入密码" placement="left">
-                <el-button icon="el-icon-lock"></el-button>
-              </el-tooltip>
-            </template> -->
           </el-input>
         </el-form-item>
         <el-from-item>
@@ -126,7 +111,7 @@ export default {
             console.error(err)
           }
         } else {
-          console.log('验证失败')
+          ElMessage.warning('验证失败')
         }
       })
     },

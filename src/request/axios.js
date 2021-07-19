@@ -20,7 +20,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/json' // 请求头
 // 请求拦截器
 axios.interceptors.request.use(config => {
     showLoading()
-    console.log('axios interceptors config: ', config)
     // 登录或者注册时，不传递Token
     if (!config.url.endsWith(baseurl.signin) && !config.url.endsWith(baseurl.signup)) {
         config.headers['jwttoken'] = getToken() // Token

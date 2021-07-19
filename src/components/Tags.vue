@@ -4,19 +4,14 @@
  * @Autor: zhanggl
  * @Date: 2021-06-23 13:57:42
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-25 08:56:59
+ * @LastEditTime: 2021-07-19 15:41:02
 -->
 
 <template>
   <div class="tags" v-if="showTags">
     <div>
       <ul class="tags-ul">
-        <li
-          class="tags-li"
-          v-for="(item, index) in tagList"
-          :class="{ active: isActive(item.path) }"
-          :key="index"
-        >
+        <li class="tags-li" v-for="(item, index) in tagList" :class="{ active: isActive(item.path) }" :key="index">
           <router-link :to="item.path" class="tags-li-title">
             {{ item.title }}
           </router-link>
@@ -114,7 +109,7 @@ export default {
      * @param {*} newRoute
      */
     $route(newRoute) {
-      this.setTag(newRoute)
+      if (newRoute.meta.needSignin) this.setTag(newRoute)
     },
   },
   created() {

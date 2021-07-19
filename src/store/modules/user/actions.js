@@ -36,7 +36,7 @@ export default {
           resolve(result)
         })
         .catch(err => {
-          console.log('signup err', err)
+          console.error('signup err', err)
           reject(err)
         })
     })
