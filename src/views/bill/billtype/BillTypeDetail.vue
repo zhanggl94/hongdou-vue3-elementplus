@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-19 17:10:22
+ * @LastEditTime: 2021-07-20 17:29:25
 -->
 <template>
   <div class="form-box">
@@ -41,7 +41,7 @@ export default defineComponent({
       required: false,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const billTypeForm = ref(null) // 在Componsition api下如果想访问 this.$refs，需要声明一个ref变量(变量名需要与Form表单的ref一样)
     const state = reactive({
       billTypeForm: {
@@ -74,6 +74,7 @@ export default defineComponent({
             )
             if (result.data.isOk) {
               ElMessage.success('保存成功')
+              emit('getBillTypeList')
               closeDialog()
             } else ElMessage.warning(result.data.message)
           } catch (error) {

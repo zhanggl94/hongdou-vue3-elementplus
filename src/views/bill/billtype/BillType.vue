@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-19 10:58:07
+ * @LastEditTime: 2021-07-20 17:21:34
 -->
 <template>
   <div>
@@ -32,12 +32,14 @@
         </el-table-column>
       </el-table>
     </div>
-    <v-bill-type-detail ref="billTypeDetail"></v-bill-type-detail>
+    <v-bill-type-detail ref="billTypeDetail" @getBillTypeList="getBillTypeList"></v-bill-type-detail>
   </div>
 </template>
 
 <script>
 import vBillTypeDetail from './BillTypeDetail.vue'
+import billTypeACTypes from '../../../store/modules/billtype/action-types'
+import { ElMessage } from 'element-plus'
 
 export default {
   data() {
@@ -49,18 +51,21 @@ export default {
   components: {
     vBillTypeDetail,
   },
-  created() {
-    this.billTypeList = this.getBillTypeList()
+  async created() {
+    await this.getBillTypeList()
   },
   methods: {
-    getBillTypeList() {
-      return [
-        { id: '0', order: 0, type: '加油', note: '加油note' },
-        { id: '1', order: 1, type: '洗车', note: '洗车note' },
-        { id: '2', order: 2, type: '保险', note: '保险note' },
-        { id: '3', order: 3, type: '罚款', note: '罚款note' },
-        { id: '4', order: 4, type: '停车费', note: '停车费note' },
-      ]
+    async getBillTypeList() {
+      try {
+        const result = await this.$store.dispatch(billTypeACTypes.SELECT, {})
+        if (result.data.isOk) {
+          this.billTypeList = result.data.data
+        } else {
+          ElMessage.warning(result.data.message)
+        }
+      } catch (error) {
+        console.error(error)
+      }
     },
     // 新建
     createBillType() {
