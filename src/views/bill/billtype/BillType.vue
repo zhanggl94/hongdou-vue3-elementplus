@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-20 17:21:34
+ * @LastEditTime: 2021-07-21 17:52:37
 -->
 <template>
   <div>
@@ -27,7 +27,9 @@
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="editHandle(scope.$index, scope.row)">编辑</el-button>
-            <el-button type="text" icon="el-icon-delete" class="red" @click="deleteHandle(scope.$index, scope.row)">删除</el-button>
+            <v-popconfirm :message="deletePop.message" :type="deletePop.type" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)" @cancleHandle="cancleDeleteHandle">
+              <el-button type="text" icon="el-icon-delete" class="red">删除</el-button>
+            </v-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -37,19 +39,26 @@
 </template>
 
 <script>
-import vBillTypeDetail from './BillTypeDetail.vue'
-import billTypeACTypes from '../../../store/modules/billtype/action-types'
 import { ElMessage } from 'element-plus'
+import vBillTypeDetail from './BillTypeDetail.vue'
+import vPopconfirm from '../../../components/Popconfirm.vue'
+import billTypeACTypes from '../../../store/modules/billtype/action-types'
 
 export default {
   data() {
     return {
       billTypeList: [],
       multipleSelection: [],
+      deletePop: {
+        message: '确定要删除选中内容吗？',
+        type: 'warning',
+        placement: 'top',
+      },
     }
   },
   components: {
     vBillTypeDetail,
+    vPopconfirm,
   },
   async created() {
     await this.getBillTypeList()
@@ -79,19 +88,11 @@ export default {
     },
     // 删除单条
     deleteHandle(index, row) {
-      this.$confirm('确定要删除吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.billTypeList.splice(index, 1)
-          this.$message.success('删除成功')
-        })
-        .catch((err) => {
-          this.$message.info('取消删除')
-          console.error(err)
-        })
+      this.billTypeList.splice(index, 1)
+      this.$message.success('删除成功')
+    },
+    cancleDeleteHandle() {
+      this.$message.info('取消删除')
     },
     // 数据选中事件
     selectionChangeHandle(selection) {
