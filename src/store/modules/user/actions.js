@@ -43,7 +43,7 @@ export default {
   },
 
   // 编辑
-  [actionTypes.EDIT](context, params) {
+  [actionTypes.USER_EDIT](context, params) {
     return new Promise((resolve, reject) => {
       user.edit(params)
         .then(result => resolve(result))

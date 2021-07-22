@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-13 10:35:32
+ * @LastEditTime: 2021-07-22 10:34:27
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -42,7 +42,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "message" */ '../views/Message.vue')
       },
       {
-        path: routePath.billtype,
+        path: routePath.billType,
         name: 'BillType',
         meta: {
           title: '账单类型',

@@ -9,5 +9,5 @@
 export default {
   SIGNIN: 'SIGNIN', // 登陆
   SIGNUP: 'SIGNUP', // 注册
-  EDIT: 'EDIT',// 编辑
+  USER_EDIT: 'USER_EDIT',// 编辑
 }

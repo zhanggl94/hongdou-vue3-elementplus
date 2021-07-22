@@ -4,9 +4,14 @@
  * @Autor: zhanggl
  * @Date: 2021-07-21 08:58:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-21 17:21:37
+ * @LastEditTime: 2021-07-22 16:07:45
  */
 export default {
+    formMode: { // 表单模式
+        create: 0,
+        edit: 1,
+        readonly: 2
+    },
     confirmType: { // popconfirm 提示框类型
         info: {
             type: 'info',

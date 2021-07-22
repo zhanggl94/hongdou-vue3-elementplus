@@ -4,15 +4,15 @@
  * @Autor: zhanggl
  * @Date: 2021-07-21 08:46:32
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-21 17:51:26
+ * @LastEditTime: 2021-07-22 17:37:13
 -->
 <template>
-  <el-popover class="pop-confirm" :width="250" :placement="placement" v-model:visible="visible">
+  <el-popover class="pop-confirm" :width="popWidth" :placement="placement" v-model:visible="visible">
     <div class='pop-title'>{{popInfo.title}}</div>
     <p class="pop-p"><i :class="popInfo.class"></i>{{message}}</p>
     <div class="pop-btn">
       <el-button size="mini" type="primary" @click="clickOk">确定</el-button>
-      <el-button size="mini" @click="closePopconfirm">取消</el-button>
+      <el-button size="mini" @click="clickCancle">取消</el-button>
     </div>
     <template #reference>
       <slot></slot>
@@ -27,21 +27,28 @@ import constants from '../utils/constants'
 export default defineComponent({
   emits: ['okHandle', 'cancleHandle'],
   props: {
+    // 提示消息
     message: {
-      // 提示消息
       type: String,
       required: true,
     },
+    // 提示类型: warning, info, success, error
     type: {
-      // 提示类型: warning, info, success, error
       type: String,
-      required: true,
+      required: false,
+      default: 'warning',
     },
+    // 提示框出现位置，默认top
     placement: {
-      // 提示框出现位置，默认top
       type: String,
       required: false,
       default: 'top',
+    },
+    // 弹出框宽度
+    popWidth: {
+      type: Number,
+      required: false,
+      default: 250,
     },
   },
   setup(props, { emit }) {
@@ -71,16 +78,20 @@ export default defineComponent({
       emit('okHandle')
     }
 
+    const clickCancle = () => {
+      closePopconfirm()
+      emit('cancleHandle')
+    }
+
     const closePopconfirm = () => {
       state.visible = false
-      emit('cancleHandle')
     }
 
     return {
       ...toRefs(state),
       popInfo,
       clickOk,
-      closePopconfirm,
+      clickCancle,
     }
   },
 })

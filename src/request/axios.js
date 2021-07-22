@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-15 17:56:20
+ * @LastEditTime: 2021-07-22 15:32:05
  */
 
 import axios from 'axios'
@@ -31,9 +31,13 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
     hideLoading()
     if (res.status === 200) {
-        if ((res?.data?.jwtToken && !getToken()) || (res?.data?.isRefreshClientToken)) {
+        // if ((res?.data?.jwtToken && !getToken()) || (res?.data?.isRefreshClientToken)) {
+        //     setToken(res.data.jwtToken)
+        // }
+        if ((res?.data?.jwtToken && !getToken()))
             setToken(res.data.jwtToken)
-        }
+        else if ((res?.data?.isRefreshClientToken))
+            setToken(res.data.jwtRefreshToken)
         return Promise.resolve(res)
     }
     else {

@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-21 17:52:37
+ * @LastEditTime: 2021-07-22 17:41:46
 -->
 <template>
   <div>
@@ -16,7 +16,9 @@
     </el-breadcrumb>
     <div class="container">
       <div class="handler-box">
-        <el-button size="small" type="danger" icon="el-icon-delete" @click="deleteAllHandle">批量删除</el-button>
+        <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteMultipleHandle" @cancleHandle="cancleDeleteHandle">
+          <el-button size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
+        </v-popconfirm>
         <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="createBillType">新建</el-button>
       </div>
       <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
@@ -27,14 +29,14 @@
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="editHandle(scope.$index, scope.row)">编辑</el-button>
-            <v-popconfirm :message="deletePop.message" :type="deletePop.type" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)" @cancleHandle="cancleDeleteHandle">
+            <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)" @cancleHandle="cancleDeleteHandle">
               <el-button type="text" icon="el-icon-delete" class="red">删除</el-button>
             </v-popconfirm>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <v-bill-type-detail ref="billTypeDetail" @getBillTypeList="getBillTypeList"></v-bill-type-detail>
+    <v-bill-type-detail v-if="showDialog" ref="billTypeDetail" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
   </div>
 </template>
 
@@ -45,30 +47,35 @@ import vPopconfirm from '../../../components/Popconfirm.vue'
 import billTypeACTypes from '../../../store/modules/billtype/action-types'
 
 export default {
+  components: {
+    vBillTypeDetail,
+    vPopconfirm,
+  },
   data() {
     return {
       billTypeList: [],
       multipleSelection: [],
       deletePop: {
         message: '确定要删除选中内容吗？',
-        type: 'warning',
         placement: 'top',
       },
+      billTypeId: -1,
+      showDialog: false,
     }
-  },
-  components: {
-    vBillTypeDetail,
-    vPopconfirm,
   },
   async created() {
     await this.getBillTypeList()
   },
   methods: {
+    // 获取账单类型列表
     async getBillTypeList() {
       try {
-        const result = await this.$store.dispatch(billTypeACTypes.SELECT, {})
+        const result = await this.$store.dispatch(
+          billTypeACTypes.BILLTYPE_SELECT,
+          {}
+        )
         if (result.data.isOk) {
-          this.billTypeList = result.data.data
+          this.billTypeList = this.$store.state.billType.list
         } else {
           ElMessage.warning(result.data.message)
         }
@@ -78,52 +85,75 @@ export default {
     },
     // 新建
     createBillType() {
+      this.showDialog = true
+      this.billTypeId = -1
       // 子页面打开
-      this.$refs.billTypeDetail.openDialog()
+      this.$nextTick(() => {
+        this.$refs.billTypeDetail.openDialog()
+      })
     },
     // 编辑单条
     editHandle(index, row) {
-      this.$refs.billTypeDetail.openDialog()
+      this.showDialog = true
+      this.billTypeId = row.id
+      this.$nextTick(() => {
+        this.$refs.billTypeDetail.openDialog()
+      })
       console.log('row', row)
     },
     // 删除单条
-    deleteHandle(index, row) {
-      this.billTypeList.splice(index, 1)
-      this.$message.success('删除成功')
+    async deleteHandle(index, { id }) {
+      try {
+        const result = await this.$store.dispatch(
+          billTypeACTypes.BILLTYPE_DELETE,
+          { idList: [id] }
+        )
+        if (result?.data?.isOk) {
+          ElMessage.success('删除成功')
+          await this.getBillTypeList()
+        } else ElMessage.warning(result.data.message)
+      } catch (error) {
+        console.error(error)
+      }
     },
     cancleDeleteHandle() {
-      this.$message.info('取消删除')
+      ElMessage.info('取消删除')
     },
     // 数据选中事件
     selectionChangeHandle(selection) {
       this.multipleSelection = selection
     },
     // 批量删除
-    deleteAllHandle() {
+    async deleteMultipleHandle() {
       if (!this.multipleSelection.length) {
-        this.$message.warning('请选择要删除的数据')
+        ElMessage.warning('请选择要删除的数据')
         return
       }
-      this.$confirm('确定要删除选中内容吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          let deleteType = ''
-          for (let item of this.multipleSelection) {
-            deleteType += item.type + ' '
-            this.billTypeList.splice(
-              this.billTypeList.findIndex((t) => t.id === item.id),
-              1
-            )
-          }
-          this.$message.success(deleteType + '被删除成功')
-        })
-        .catch((err) => {
-          this.$message.info('取消删除')
-          console.error(err)
-        })
+      try {
+        const idList = []
+        let deleteType = ''
+        for (let item of this.multipleSelection) {
+          deleteType += item.type + ' '
+          idList.push(item.id)
+        }
+        const result = await this.$store.dispatch(
+          billTypeACTypes.BILLTYPE_DELETE,
+          idList
+        )
+        if (result.data.isOk) {
+          ElMessage.success(deleteType + '被删除成功')
+          await this.getBillTypeList()
+        } else ElMessage.warning(result.data.message)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    // 当子页面关闭时，通过emit调用此方法
+    async closeDialog(isRerefreshData) {
+      if (isRerefreshData) {
+        await this.getBillTypeList()
+      }
+      this.showDialog = false
     },
   },
 }
