@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 16:46:37
+ * @LastEditTime: 2021-07-23 08:55:26
 -->
 <template>
   <div class="form-box">
@@ -106,7 +106,7 @@ export default defineComponent({
           try {
             // 判断接口类型
             const actionType =
-              formMode.value === constants.create
+              formMode.value.type === constants.formMode.create
                 ? billTypeACTypes.BILLTYPE_CREATE
                 : billTypeACTypes.BILLTYPE_EDIT
             // 执行接口
@@ -128,6 +128,8 @@ export default defineComponent({
       if (formMode.value.type === constants.formMode.edit) {
         // 如果id存在，获取账单信息
         await getBillTypeInfo()
+      } else {
+        state.billTypeInfo.id = null
       }
     })
 

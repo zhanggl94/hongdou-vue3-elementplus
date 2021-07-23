@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 17:41:46
+ * @LastEditTime: 2021-07-23 09:34:22
 -->
 <template>
   <div>
@@ -24,7 +24,6 @@
       <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
         <el-table-column prop="type" width="100px" label="类型"></el-table-column>
-        <el-table-column prop="order" width="100px" sortable label="排序"></el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
@@ -35,6 +34,10 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination background layout="prev, pager, next, total" :total="pageInfo.total" :page-size="pageInfo.size" :page-index="pageInfo.index">
+        </el-pagination>
+      </div>
     </div>
     <v-bill-type-detail v-if="showDialog" ref="billTypeDetail" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
   </div>
@@ -54,6 +57,11 @@ export default {
   data() {
     return {
       billTypeList: [],
+      pageInfo: {
+        index: 1,
+        size: 10,
+        total: 0,
+      },
       multipleSelection: [],
       deletePop: {
         message: '确定要删除选中内容吗？',
@@ -76,6 +84,7 @@ export default {
         )
         if (result.data.isOk) {
           this.billTypeList = this.$store.state.billType.list
+          this.pageInfo.total = this.billTypeList.length
         } else {
           ElMessage.warning(result.data.message)
         }
@@ -101,7 +110,7 @@ export default {
       })
       console.log('row', row)
     },
-    // 删除单条
+    // 删除单条-popconfirm组件点击确定后触发
     async deleteHandle(index, { id }) {
       try {
         const result = await this.$store.dispatch(
@@ -116,6 +125,7 @@ export default {
         console.error(error)
       }
     },
+    // 取消删除后的Message-popconfirm组件点击取消后触发
     cancleDeleteHandle() {
       ElMessage.info('取消删除')
     },
@@ -123,7 +133,7 @@ export default {
     selectionChangeHandle(selection) {
       this.multipleSelection = selection
     },
-    // 批量删除
+    // 批量删除-popconfirm组件点击确定后触发
     async deleteMultipleHandle() {
       if (!this.multipleSelection.length) {
         ElMessage.warning('请选择要删除的数据')
