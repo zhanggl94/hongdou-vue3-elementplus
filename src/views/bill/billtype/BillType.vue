@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-23 10:10:00
+ * @LastEditTime: 2021-07-23 17:56:19
 -->
 <template>
   <div>
@@ -16,7 +16,8 @@
     </el-breadcrumb>
     <div class="container">
       <div class="handler-box">
-        <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteMultipleHandle" @cancleHandle="cancleDeleteHandle">
+        <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteMultipleHandle"
+          @cancleHandle="cancleDeleteHandle">
           <el-button size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
         </v-popconfirm>
         <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="createBillType">新建</el-button>
@@ -28,16 +29,15 @@
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="editHandle(scope.$index, scope.row)">编辑</el-button>
-            <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)" @cancleHandle="cancleDeleteHandle">
+            <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)"
+              @cancleHandle="cancleDeleteHandle">
               <el-button type="text" icon="el-icon-delete" class="red">删除</el-button>
             </v-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination background layout="prev, pager, next, total" :total="pageInfo.total" :page-size="pageInfo.size" :page-index="pageInfo.index">
-        </el-pagination>
-      </div>
+      <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange"
+        @handleSizeChange="handleSizeChange" @handleRefreshTable="handleRefreshTable"></v-pagination>
     </div>
     <v-bill-type-detail v-if="showDialog" ref="billTypeDetail" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
   </div>
@@ -47,12 +47,14 @@
 import { ElMessage } from 'element-plus'
 import vBillTypeDetail from './BillTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
+import vPagination from '../../../components/Pagination.vue'
 import billTypeACTypes from '../../../store/modules/billtype/action-types'
 
 export default {
   components: {
     vBillTypeDetail,
     vPopconfirm,
+    vPagination,
   },
   data() {
     return {
@@ -148,7 +150,7 @@ export default {
         }
         const result = await this.$store.dispatch(
           billTypeACTypes.BILLTYPE_DELETE,
-          {idList}
+          { idList }
         )
         if (result.data.isOk) {
           ElMessage.success(deleteType + '被删除成功')
@@ -164,6 +166,25 @@ export default {
         await this.getBillTypeList()
       }
       this.showDialog = false
+    },
+    // 前进后退时触发
+    handleCurrentChange(val) {
+      console.log('当前页改变：', val)
+      this.pageInfo.index = val
+    },
+    // 每页显示条数发生变化时触发
+    handleSizeChange(val) {
+      console.log('每页条数改变：', val)
+      this.pageInfo.size = val
+    },
+    // 点击刷新按钮时触发
+    async handleRefreshTable(val) {
+      await this.getBillTypeList()
+      console.log('刷新当前页：', val)
+      // this.$set(this.tableInfo, 'pageNum', val.current)
+      // this.$set(this.tableInfo, 'pageSize', val.pageSize)
+      this.pageInfo.index = val.current
+      this.pageInfo.size = val.pageSize
     },
   },
 }
