@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-23 09:34:22
+ * @LastEditTime: 2021-07-23 10:10:00
 -->
 <template>
   <div>
@@ -148,7 +148,7 @@ export default {
         }
         const result = await this.$store.dispatch(
           billTypeACTypes.BILLTYPE_DELETE,
-          idList
+          {idList}
         )
         if (result.data.isOk) {
           ElMessage.success(deleteType + '被删除成功')

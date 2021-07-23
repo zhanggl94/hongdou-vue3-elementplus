@@ -75,6 +75,11 @@ a {
     background: #f6faff;
 }
 
+.pagination {
+    margin: 20px 0;
+    text-align: right;
+}
+
 .mgb20 {
     margin-bottom: 20px;
 }
