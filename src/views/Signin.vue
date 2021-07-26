@@ -82,7 +82,7 @@ export default {
               username: this.formInfo.username,
               password: this.formInfo.password,
             }) // 登录
-            if (result?.data?.isOk) {
+            if (result?.data?.code) {
               ElMessage.success('欢迎登录 ' + this.$store.state.user.username)
               if (this.$route.query.redirect) {
                 this.$router.push(this.$route.query.redirect)

@@ -92,7 +92,7 @@ export default {
               id: this.$store.state.user.id,
               username: this.$store.state.user.username,
             })
-            if (result.data.isOk) {
+            if (result.data.code) {
               this.$refs[formName].resetFields()
               ElMessage.success('密码修改成功，请重新登录')
               this.$store.commit(userMUTypes.CLEAR_USERINFO)

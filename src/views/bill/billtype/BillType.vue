@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-23 17:56:19
+ * @LastEditTime: 2021-07-26 16:25:31
 -->
 <template>
   <div>
@@ -82,11 +82,11 @@ export default {
       try {
         const result = await this.$store.dispatch(
           billTypeACTypes.BILLTYPE_SELECT,
-          {}
+          { pageIndex: this.pageInfo.index, pageSize: this.pageInfo.size }
         )
-        if (result.data.isOk) {
-          this.billTypeList = this.$store.state.billType.list
-          this.pageInfo.total = this.billTypeList.length
+        if (result.data.code) {
+          this.billTypeList = result.data.data.list
+          this.pageInfo.total = result.data.data.total
         } else {
           ElMessage.warning(result.data.message)
         }
@@ -119,7 +119,7 @@ export default {
           billTypeACTypes.BILLTYPE_DELETE,
           { idList: [id] }
         )
-        if (result?.data?.isOk) {
+        if (result?.data?.code) {
           ElMessage.success('删除成功')
           await this.getBillTypeList()
         } else ElMessage.warning(result.data.message)
@@ -152,7 +152,7 @@ export default {
           billTypeACTypes.BILLTYPE_DELETE,
           { idList }
         )
-        if (result.data.isOk) {
+        if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
           await this.getBillTypeList()
         } else ElMessage.warning(result.data.message)
@@ -168,24 +168,34 @@ export default {
       this.showDialog = false
     },
     // 前进后退时触发
-    handleCurrentChange(val) {
+    async handleCurrentChange(val) {
       console.log('当前页改变：', val)
       this.pageInfo.index = val
+      // await this.getBillTypeList()
     },
     // 每页显示条数发生变化时触发
-    handleSizeChange(val) {
+    async handleSizeChange(val) {
       console.log('每页条数改变：', val)
       this.pageInfo.size = val
+      await this.getBillTypeList()
     },
     // 点击刷新按钮时触发
     async handleRefreshTable(val) {
-      await this.getBillTypeList()
+      // this.pageInfo.index = val.current
+      // this.pageInfo.size = val.pageSize
+      // await this.getBillTypeList()
       console.log('刷新当前页：', val)
       // this.$set(this.tableInfo, 'pageNum', val.current)
       // this.$set(this.tableInfo, 'pageSize', val.pageSize)
-      this.pageInfo.index = val.current
-      this.pageInfo.size = val.pageSize
     },
+
+    // changePage(list, pageIndex, pageSize) {
+    //   let newList = list
+    //   if (list.length) {
+    //     const total = list.length
+    //   }
+    //   return newList
+    // },
   },
 }
 </script>

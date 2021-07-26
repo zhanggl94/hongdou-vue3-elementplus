@@ -31,7 +31,7 @@ export default {
     return new Promise((resolve, reject) => {
       user.signup(params)
         .then(result => {
-          if (result?.data?.isOk)
+          if (result?.data?.code)
             commit(mutationTypes.SET_USERINFO, result.data.data)
           resolve(result)
         })

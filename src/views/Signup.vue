@@ -99,7 +99,7 @@ export default {
               userACTypes.SIGNUP,
               this.formInfo
             )
-            if (result.data.isOk) {
+            if (result.data.code) {
               ElMessage.success('欢迎登录 ' + this.$store.state.user.username)
               if (this.$route.query.redirect) {
                 this.$router.push(this.$route.query.redirect)

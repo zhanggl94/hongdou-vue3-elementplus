@@ -8,19 +8,13 @@
  */
 import actionTypes from './action-types'
 import billType from '../../../api/billtype'
-import muTypes from './mutation-types'
-import { compare } from '../../../utils/utils'
 
 export default {
   // 查询
-  [actionTypes.BILLTYPE_SELECT]({ commit }, params) {
+  [actionTypes.BILLTYPE_SELECT](context, params) {
     return new Promise((resolve, reject) => {
       billType.select(params)
         .then(result => {
-          if (result.data.isOk) {
-            const list = result.data.data.sort(compare('sort'))
-            commit(muTypes.SETBILLTYPELIST, list)
-          }
           resolve(result)
         })
         .catch(error => reject(error))

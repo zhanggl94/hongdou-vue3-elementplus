@@ -92,7 +92,7 @@ export default defineComponent({
         const result = await store.dispatch(billTypeACTypes.BILLTYPE_SELECT, {
           id: props.billTypeId,
         })
-        if (result.data.isOk) state.billTypeInfo = result.data.data[0]
+        if (result.data.code) state.billTypeInfo = result.data.data[0]
         else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
@@ -111,7 +111,7 @@ export default defineComponent({
                 : billTypeACTypes.BILLTYPE_EDIT
             // 执行接口
             const result = await store.dispatch(actionType, state.billTypeInfo)
-            if (result.data.isOk) {
+            if (result.data.code) {
               ElMessage.success('保存成功')
               closeDialog(1)
             } else ElMessage.warning(result.data.message)

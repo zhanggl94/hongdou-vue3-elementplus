@@ -7,6 +7,4 @@
  * @LastEditTime: 2021-07-18 05:57:37
  */
 export default {
-  // 账单类型list
-  list: []
 }

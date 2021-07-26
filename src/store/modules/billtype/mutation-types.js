@@ -7,5 +7,5 @@
  * @LastEditTime: 2021-07-22 09:15:38
  */
 export default{
-    SETBILLTYPELIST:'SETBILLTYPELIST', // 设定账单类型的List
+
 }
