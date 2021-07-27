@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-26 16:25:31
+ * @LastEditTime: 2021-07-27 16:10:04
 -->
 <template>
   <div>
@@ -24,7 +24,7 @@
       </div>
       <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
-        <el-table-column prop="type" width="100px" label="类型"></el-table-column>
+        <el-table-column prop="type" width="200px" label="类型"></el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
@@ -169,33 +169,18 @@ export default {
     },
     // 前进后退时触发
     async handleCurrentChange(val) {
-      console.log('当前页改变：', val)
       this.pageInfo.index = val
-      // await this.getBillTypeList()
+      await this.getBillTypeList()
     },
     // 每页显示条数发生变化时触发
     async handleSizeChange(val) {
-      console.log('每页条数改变：', val)
       this.pageInfo.size = val
       await this.getBillTypeList()
     },
     // 点击刷新按钮时触发
-    async handleRefreshTable(val) {
-      // this.pageInfo.index = val.current
-      // this.pageInfo.size = val.pageSize
-      // await this.getBillTypeList()
-      console.log('刷新当前页：', val)
-      // this.$set(this.tableInfo, 'pageNum', val.current)
-      // this.$set(this.tableInfo, 'pageSize', val.pageSize)
+    async handleRefreshTable() {
+      await this.getBillTypeList()
     },
-
-    // changePage(list, pageIndex, pageSize) {
-    //   let newList = list
-    //   if (list.length) {
-    //     const total = list.length
-    //   }
-    //   return newList
-    // },
   },
 }
 </script>

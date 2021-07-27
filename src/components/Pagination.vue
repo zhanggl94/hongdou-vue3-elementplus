@@ -4,19 +4,19 @@
  * @Autor: zhanggl
  * @Date: 2021-07-23 09:53:02
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-26 15:30:45
+ * @LastEditTime: 2021-07-27 15:49:22
 -->
 <template>
   <div class="pagination" :class="{hidden:isHidden}">
     <span class="refresh_icon el-icon-refresh" title="刷新" @click="handleRefreshTable"></span>
-    <el-pagination :background="background" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" :layout="layout" :total="total"
-      :pager-count="pagerCount" v-bind="$attrs" @size-change="handleSizeChange" @current-change="handleCurrentChange">
+    <el-pagination :background="background" :current-page="page" :page-sizes="pageSizes" :page-size="limit" :layout="layout" :total="total"
+      :pager-count="pagerCount" @size-change="handleSizeChange" @current-change="handleCurrentChange">
     </el-pagination>
   </div>
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -64,26 +64,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    // 计算属性返回当前页 （会改变）
-    const currentPage = computed({
-      get() {
-        return props.page
-      },
-      set(val) {
-        emit('update:page', val)
-      },
-    })
-
-    // 返回每页的限制条数，如每页30条，支持 .sync 修饰符实现同步更改
-    const pageSize = computed({
-      get() {
-        return props.limit
-      },
-      set(val) {
-        //当 pageSize 值发生更改时，在 computed 中会触发 pageSize 的 set 方法，修改父组件的 limit 值
-        emit('update:limit', val)
-      },
-    })
 
     // 页面总条数发生变化-改变每页多少条
     const handleSizeChange = (val) => {
@@ -97,15 +77,10 @@ export default defineComponent({
 
     // 刷新
     const handleRefreshTable = () => {
-      emit('handleRefreshTable', {
-        current: currentPage,
-        pageSize: pageSize,
-      })
+      emit('handleRefreshTable')
     }
 
     return {
-      currentPage,
-      pageSize,
       handleSizeChange,
       handleCurrentChange,
       handleRefreshTable,

@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-23 08:55:26
+ * @LastEditTime: 2021-07-27 16:07:57
 -->
 <template>
   <div class="form-box">
@@ -92,7 +92,7 @@ export default defineComponent({
         const result = await store.dispatch(billTypeACTypes.BILLTYPE_SELECT, {
           id: props.billTypeId,
         })
-        if (result.data.code) state.billTypeInfo = result.data.data[0]
+        if (result.data.code) state.billTypeInfo = result.data.data.list[0]
         else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
@@ -124,7 +124,6 @@ export default defineComponent({
 
     // 生命周期函数
     onMounted(async () => {
-      console.log('onMounted 被调用了')
       if (formMode.value.type === constants.formMode.edit) {
         // 如果id存在，获取账单信息
         await getBillTypeInfo()
