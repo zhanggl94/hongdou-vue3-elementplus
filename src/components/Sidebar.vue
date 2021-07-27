@@ -9,16 +9,8 @@
 
 <template>
   <div>
-    <el-menu
-      class="sidebar-el-menu"
-      background-color="#324157"
-      text-color="#bfcbd9"
-      active-text-color="#20a0ff"
-      unique-opened
-      :collapse="collapse"
-      :default-active="onRoutes"
-      router
-    >
+    <el-menu class="sidebar-el-menu" background-color="#324157" text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened :collapse="collapse"
+      :default-active="onRoutes" router>
       <template v-for="item in sidebarData">
         <template v-if="item.subs">
           <el-submenu :index="item.index" :key="item.index">
@@ -27,17 +19,9 @@
               <span>{{ item.title }}</span>
             </template>
             <template v-for="subItem in item.subs">
-              <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index"
-              >
+              <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
                 <template #title>{{ subItem.title }}</template>
-                <el-menu-item
-                  v-for="(threeItem, i) in subItem.subs"
-                  :key="i"
-                  :index="threeItem.index"
-                >
+                <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">
                   {{ threeItem.title }}
                 </el-menu-item>
               </el-submenu>
@@ -60,18 +44,24 @@
 
 <script>
 import { mapState } from 'vuex'
+import path from '../router/path'
+
 export default {
   data() {
     return {
       sidebarData: [
         {
-          icon:'el-icon-truck',
-          index:'carbill',
-          title:'汽车账单',
-          subs:[
+          icon: 'el-icon-truck',
+          index: 'carbill',
+          title: '汽车账单',
+          subs: [
             {
-              index:'billtype',
-              title:'账单类型',
+              index: path.billType,
+              title: '账单类型',
+            },
+            {
+              index: path.payType,
+              title: '支付类型',
             },
           ],
         },
@@ -81,11 +71,11 @@ export default {
           title: '错误处理',
           subs: [
             {
-              index: 'permission',
+              index: path.to403,
               title: '权限测试',
             },
             {
-              index: '404',
+              index: path.to404,
               title: '404',
             },
           ],
@@ -111,7 +101,7 @@ export default {
   height: 100%;
 }
 .sidebar::-webkit-scrollbar {
-    width: 0;
+  width: 0;
 }
 .sidebar > ul {
   height: 100%;
