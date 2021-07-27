@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 10:34:27
+ * @LastEditTime: 2021-07-27 16:29:55
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -49,6 +49,15 @@ const routes = [
           needSignin: true,
         },
         component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/billtype/BillType.vue')
+      },
+      {
+        path: routePath.payType,
+        name: 'PayType',
+        meta: {
+          title: '支付类型',
+          needSignin: true,
+        },
+        component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/paytype/PayType.vue')
       },
       {
         path: routePath.to403,
