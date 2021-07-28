@@ -6,7 +6,7 @@
  * @LastEditors: zhanggl
  * @LastEditTime: 2021-07-28 11:45:41
  */
-import axios from '../request/axios'
+import axios from '../../request/axios'
 import base from './base'
 
 export default {

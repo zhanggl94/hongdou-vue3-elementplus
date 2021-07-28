@@ -24,5 +24,11 @@ export default {
       create:'/paytype/create',
       edit:'/paytype/edit',
       delete:'/paytype/delete',
+    },
+    carBrand:{ // 支付类型
+      select:'/carbrand/select',
+      create:'/carbrand/create',
+      edit:'/carbrand/edit',
+      delete:'/carbrand/delete',
     }
 }

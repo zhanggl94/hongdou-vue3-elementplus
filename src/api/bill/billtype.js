@@ -6,8 +6,8 @@
  * @LastEditors: zhanggl
  * @LastEditTime: 2021-07-22 16:19:24
  */
-import axios from '../request/axios'
-import base from './base'
+import axios from '../../request/axios'
+import base from '../base'
 
 export default {
   select: (params) => axios.get(base.management + base.billType.select, { params }),

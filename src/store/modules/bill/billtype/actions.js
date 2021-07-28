@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-07-22 17:52:31
  */
 import actionTypes from './action-types'
-import billType from '../../../api/billtype'
+import billType from '../../../../api/bill/billtype'
 
 export default {
   // 查询
