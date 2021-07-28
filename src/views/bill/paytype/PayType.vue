@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-27 16:29:22
+ * @LastEditTime: 2021-07-28 11:31:43
 -->
 <template>
   <div>
@@ -20,9 +20,9 @@
           @cancleHandle="cancleDeleteHandle">
           <el-button size="small" type="danger" icon="el-icon-delete">批量删除</el-button>
         </v-popconfirm>
-        <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="createBillType">新建</el-button>
+        <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="createPayType">新建</el-button>
       </div>
-      <el-table :data="billTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
+      <el-table :data="payTypeList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
         <el-table-column prop="type" width="200px" label="类型"></el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
@@ -39,26 +39,26 @@
       <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange"
         @handleSizeChange="handleSizeChange" @handleRefreshTable="handleRefreshTable"></v-pagination>
     </div>
-    <v-bill-type-detail v-if="showDialog" ref="billTypeDetail" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
+    <v-pay-type-detail v-if="showDialog" ref="payTypeDetail" :payTypeId="payTypeId" @closeDialog="closeDialog"></v-pay-type-detail>
   </div>
 </template>
 
 <script>
 import { ElMessage } from 'element-plus'
-import vBillTypeDetail from './PayTypeDetail.vue'
+import vPayTypeDetail from './PayTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
 import vPagination from '../../../components/Pagination.vue'
-import billTypeACTypes from '../../../store/modules/billtype/action-types'
+import payTypeACTypes from '../../../store/modules/paytype/action-types'
 
 export default {
   components: {
-    vBillTypeDetail,
+    vPayTypeDetail,
     vPopconfirm,
     vPagination,
   },
   data() {
     return {
-      billTypeList: [],
+      payTypeList: [],
       pageInfo: {
         index: 1,
         size: 10,
@@ -69,23 +69,23 @@ export default {
         message: '确定要删除选中内容吗？',
         placement: 'top',
       },
-      billTypeId: -1,
+      payTypeId: -1,
       showDialog: false,
     }
   },
   async created() {
-    await this.getBillTypeList()
+    await this.getPayTypeList()
   },
   methods: {
     // 获取支付类型列表
-    async getBillTypeList() {
+    async getPayTypeList() {
       try {
         const result = await this.$store.dispatch(
-          billTypeACTypes.BILLTYPE_SELECT,
+          payTypeACTypes.PAYTYPE_SELECT,
           { pageIndex: this.pageInfo.index, pageSize: this.pageInfo.size }
         )
         if (result.data.code) {
-          this.billTypeList = result.data.data.list
+          this.payTypeList = result.data.data.list
           this.pageInfo.total = result.data.data.total
         } else {
           ElMessage.warning(result.data.message)
@@ -95,20 +95,20 @@ export default {
       }
     },
     // 新建
-    createBillType() {
+    createPayType() {
       this.showDialog = true
-      this.billTypeId = -1
+      this.payTypeId = -1
       // 子页面打开
       this.$nextTick(() => {
-        this.$refs.billTypeDetail.openDialog()
+        this.$refs.payTypeDetail.openDialog()
       })
     },
     // 编辑单条
     editHandle(index, row) {
       this.showDialog = true
-      this.billTypeId = row.id
+      this.payTypeId = row.id
       this.$nextTick(() => {
-        this.$refs.billTypeDetail.openDialog()
+        this.$refs.payTypeDetail.openDialog()
       })
       console.log('row', row)
     },
@@ -116,12 +116,12 @@ export default {
     async deleteHandle(index, { id }) {
       try {
         const result = await this.$store.dispatch(
-          billTypeACTypes.BILLTYPE_DELETE,
+          payTypeACTypes.PAYTYPE_DELETE,
           { idList: [id] }
         )
         if (result?.data?.code) {
           ElMessage.success('删除成功')
-          await this.getBillTypeList()
+          await this.getPayTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
@@ -149,12 +149,12 @@ export default {
           idList.push(item.id)
         }
         const result = await this.$store.dispatch(
-          billTypeACTypes.BILLTYPE_DELETE,
+          payTypeACTypes.PAYTYPE_DELETE,
           { idList }
         )
         if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
-          await this.getBillTypeList()
+          await this.getPayTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
@@ -163,23 +163,23 @@ export default {
     // 当子页面关闭时，通过emit调用此方法
     async closeDialog(isRerefreshData) {
       if (isRerefreshData) {
-        await this.getBillTypeList()
+        await this.getPayTypeList()
       }
       this.showDialog = false
     },
     // 前进后退时触发
     async handleCurrentChange(val) {
       this.pageInfo.index = val
-      await this.getBillTypeList()
+      await this.getPayTypeList()
     },
     // 每页显示条数发生变化时触发
     async handleSizeChange(val) {
       this.pageInfo.size = val
-      await this.getBillTypeList()
+      await this.getPayTypeList()
     },
     // 点击刷新按钮时触发
     async handleRefreshTable() {
-      await this.getBillTypeList()
+      await this.getPayTypeList()
     },
   },
 }

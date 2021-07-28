@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-27 16:07:57
+ * @LastEditTime: 2021-07-28 11:08:20
 -->
 <template>
   <div class="form-box">
@@ -92,7 +92,7 @@ export default defineComponent({
         const result = await store.dispatch(billTypeACTypes.BILLTYPE_SELECT, {
           id: props.billTypeId,
         })
-        if (result.data.code) state.billTypeInfo = result.data.data.list[0]
+        if (result.data.code) state.billTypeInfo = result.data.data
         else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)

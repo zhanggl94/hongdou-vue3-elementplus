@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:28:11
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-09 10:17:58
+ * @LastEditTime: 2021-07-28 11:29:46
  */
 
 export default {
@@ -18,5 +18,11 @@ export default {
       create:'/billtype/create',
       edit:'/billtype/edit',
       delete:'/billtype/delete',
+    },
+    payType:{ // 支付类型
+      select:'/paytype/select',
+      create:'/paytype/create',
+      edit:'/paytype/edit',
+      delete:'/paytype/delete',
     }
 }
