@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-06 15:55:10
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 11:08:20
+ * @LastEditTime: 2021-07-28 16:38:18
 -->
 <template>
   <div class="form-box">
@@ -39,7 +39,7 @@ import {
 } from 'vue'
 import { validateNull } from '../../../utils/utils'
 import store from '../../../store' // 引入vuex的store
-import billTypeACTypes from '../../../store/modules/billtype/action-types'
+import billTypeACTypes from '../../../store/modules/bill/billtype/action-types'
 import constants from '../../../utils/constants'
 
 export default defineComponent({

@@ -13,7 +13,7 @@ import message from './modules/message'
 import tags from './modules/tags'
 import billType from './modules/bill/billtype'
 import payType from './modules/bill/paytype'
-import carBrand from './modules/bill/carbrand'
+import carBrand from './modules/bill/car/carbrand'
 
 export default new Store({
   state: {

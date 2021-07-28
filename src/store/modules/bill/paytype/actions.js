@@ -4,10 +4,10 @@
  * @Author: zhanggl
  * @Date: 2021-07-18 05:59:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 17:52:31
+ * @LastEditTime: 2021-07-28 16:36:26
  */
 import actionTypes from './action-types'
-import payType from '../../../api/paytype'
+import payType from '../../../../api/bill/paytype'
 
 export default {
   // 查询

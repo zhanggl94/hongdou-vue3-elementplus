@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-27 16:10:04
+ * @LastEditTime: 2021-07-28 16:38:01
 -->
 <template>
   <div>
@@ -48,7 +48,7 @@ import { ElMessage } from 'element-plus'
 import vBillTypeDetail from './BillTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
 import vPagination from '../../../components/Pagination.vue'
-import billTypeACTypes from '../../../store/modules/billtype/action-types'
+import billTypeACTypes from '../../../store/modules/bill/billtype/action-types'
 
 export default {
   components: {

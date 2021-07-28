@@ -4,10 +4,10 @@
  * @Author: zhanggl
  * @Date: 2021-07-18 06:09:41
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 11:45:41
+ * @LastEditTime: 2021-07-28 16:39:35
  */
 import axios from '../../request/axios'
-import base from './base'
+import base from '../base'
 
 export default {
   select: (params) => axios.get(base.management + base.payType.select, { params }),

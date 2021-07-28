@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-27 16:29:55
+ * @LastEditTime: 2021-07-28 17:00:17
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
@@ -58,6 +58,15 @@ const routes = [
           needSignin: true,
         },
         component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/paytype/PayType.vue')
+      },
+      {
+        path: routePath.carBrand,
+        name: 'CarBrand',
+        meta: {
+          title: '汽车品牌',
+          needSignin: true,
+        },
+        component: () => import(/* webpackChunkName: "billtype" */ '../views/bill/car/carbrand/CarBrand.vue')
       },
       {
         path: routePath.to403,

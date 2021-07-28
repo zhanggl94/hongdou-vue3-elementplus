@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-06-23 13:57:23
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-06-30 18:03:13
+ * @LastEditTime: 2021-07-28 16:33:05
 -->
 
 <template>
@@ -62,6 +62,10 @@ export default {
             {
               index: path.payType,
               title: '支付类型',
+            },
+            {
+              index: path.carBrand,
+              title: '汽车品牌',
             },
           ],
         },

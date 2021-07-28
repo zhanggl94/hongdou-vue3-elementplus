@@ -4,10 +4,10 @@
  * @Autor: zhanggl
  * @Date: 2021-07-28 16:19:48
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 16:19:49
+ * @LastEditTime: 2021-07-28 16:58:19
  */
-import axios from '../../request/axios'
-import base from '../base'
+import axios from '../../../request/axios'
+import base from '../../base'
 export default {
     select: (params) => axios.get(base.management + base.carBrand.select, { params }),
     create: (params) => axios.post(base.management + base.carBrand.create, params),

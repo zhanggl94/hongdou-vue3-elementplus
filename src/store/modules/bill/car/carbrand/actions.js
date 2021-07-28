@@ -4,10 +4,10 @@
  * @Author: zhanggl
  * @Date: 2021-07-18 05:59:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 17:52:31
+ * @LastEditTime: 2021-07-28 16:36:38
  */
 import actionTypes from './action-types'
-import carBrand from '../../../api/carbrand'
+import carBrand from '../../../../../api/bill/car/carbrand'
 
 export default {
   // 查询

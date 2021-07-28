@@ -48,7 +48,7 @@ import { ElMessage } from 'element-plus'
 import vPayTypeDetail from './PayTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
 import vPagination from '../../../components/Pagination.vue'
-import payTypeACTypes from '../../../store/modules/paytype/action-types'
+import payTypeACTypes from '../../../store/modules/bill/paytype/action-types'
 
 export default {
   components: {

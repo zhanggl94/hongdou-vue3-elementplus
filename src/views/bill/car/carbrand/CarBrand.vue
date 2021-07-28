@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 16:14:04
+ * @LastEditTime: 2021-07-28 18:04:10
 -->
 <template>
   <div>
@@ -44,20 +44,23 @@
 </template>
 
 <script>
+import { defineComponent, onMounted, reactive, toRefs, ref, nextTick  } from 'vue'
 import { ElMessage } from 'element-plus'
 import vCarBrandDetail from './CarBrandDetail.vue'
-import vPopconfirm from '../../../components/Popconfirm.vue'
-import vPagination from '../../../components/Pagination.vue'
-import carBrandACTypes from '../../../store/modules/carbrand/action-types'
+import vPopconfirm from '../../../../components/Popconfirm.vue'
+import vPagination from '../../../../components/Pagination.vue'
+import carBrandACTypes from '../../../../store/modules/bill/car/carbrand/action-types'
+import store from '../../../../store' // 引入vuex的store
 
-export default {
+export default defineComponent({
   components: {
     vCarBrandDetail,
     vPopconfirm,
     vPagination,
   },
-  data() {
-    return {
+  setup() {
+    const carBrandDetail = ref(null) // 在Componsition api下如果想访问 this.$refs，需要声明一个ref变量(变量名需要与Form表单的ref一样)
+    const state = reactive({
       carBrandList: [],
       pageInfo: {
         index: 1,
@@ -71,118 +74,131 @@ export default {
       },
       carBrandId: -1,
       showDialog: false,
-    }
-  },
-  async created() {
-    await this.getCarBrandList()
-  },
-  methods: {
+    })
+
+    onMounted(async () => {
+      await getCarBrandList()
+    })
+
     // 获取汽车品牌列表
-    async getCarBrandList() {
+    const getCarBrandList = async () => {
       try {
-        const result = await this.$store.dispatch(
-          carBrandACTypes.PAYTYPE_SELECT,
-          { pageIndex: this.pageInfo.index, pageSize: this.pageInfo.size }
+        const result = await store.dispatch(
+          carBrandACTypes.CARBRAND_SELECT,
+          { pageIndex: state.pageInfo.index, pageSize: state.pageInfo.size }
         )
         if (result.data.code) {
-          this.carBrandList = result.data.data.list
-          this.pageInfo.total = result.data.data.total
+          state.carBrandList = result.data.data.list
+          state.pageInfo.total = result.data.data.total
         } else {
           ElMessage.warning(result.data.message)
         }
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 新建
-    createCarBrand() {
-      this.showDialog = true
-      this.carBrandId = -1
+    const createCarBrand = () => {
+      state.showDialog = true
+      state.carBrandId = -1
       // 子页面打开
-      this.$nextTick(() => {
-        this.$refs.carBrandDetail.openDialog()
+      nextTick(() => {
+        carBrandDetail.value.openDialog()
       })
-    },
+    }
     // 编辑单条
-    editHandle(index, row) {
-      this.showDialog = true
-      this.carBrandId = row.id
-      this.$nextTick(() => {
-        this.$refs.carBrandDetail.openDialog()
+    const editHandle = (index, row) => {
+      state.showDialog = true
+      state.carBrandId = row.id
+      nextTick(() => {
+        carBrandDetail.value.openDialog()
       })
       console.log('row', row)
-    },
+    }
     // 删除单条-popconfirm组件点击确定后触发
-    async deleteHandle(index, { id }) {
+    const deleteHandle = async (index, { id }) => {
       try {
-        const result = await this.$store.dispatch(
+        const result = await store.dispatch(
           carBrandACTypes.PAYTYPE_DELETE,
           { idList: [id] }
         )
         if (result?.data?.code) {
           ElMessage.success('删除成功')
-          await this.getCarBrandList()
+          await getCarBrandList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 取消删除后的Message-popconfirm组件点击取消后触发
-    cancleDeleteHandle() {
+    const cancleDeleteHandle = () => {
       ElMessage.info('取消删除')
-    },
+    }
     // 数据选中事件
-    selectionChangeHandle(selection) {
-      this.multipleSelection = selection
-    },
+    const selectionChangeHandle = (selection) => {
+      state.multipleSelection = selection
+    }
     // 批量删除-popconfirm组件点击确定后触发
-    async deleteMultipleHandle() {
-      if (!this.multipleSelection.length) {
+    const deleteMultipleHandle = async () => {
+      if (!state.multipleSelection.length) {
         ElMessage.warning('请选择要删除的数据')
         return
       }
       try {
         const idList = []
         let deleteType = ''
-        for (let item of this.multipleSelection) {
+        for (let item of state.multipleSelection) {
           deleteType += item.type + ' '
           idList.push(item.id)
         }
-        const result = await this.$store.dispatch(
+        const result = await store.dispatch(
           carBrandACTypes.PAYTYPE_DELETE,
           { idList }
         )
         if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
-          await this.getCarBrandList()
+          await getCarBrandList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 当子页面关闭时，通过emit调用此方法
-    async closeDialog(isRerefreshData) {
+    const closeDialog = async (isRerefreshData) => {
       if (isRerefreshData) {
-        await this.getCarBrandList()
+        await getCarBrandList()
       }
-      this.showDialog = false
-    },
+      state.showDialog = false
+    }
     // 前进后退时触发
-    async handleCurrentChange(val) {
-      this.pageInfo.index = val
-      await this.getCarBrandList()
-    },
+    const handleCurrentChange = async (val) => {
+      state.pageInfo.index = val
+      await getCarBrandList()
+    }
     // 每页显示条数发生变化时触发
-    async handleSizeChange(val) {
-      this.pageInfo.size = val
-      await this.getCarBrandList()
-    },
+    const handleSizeChange = async (val) => {
+      state.pageInfo.size = val
+      await getCarBrandList()
+    }
     // 点击刷新按钮时触发
-    async handleRefreshTable() {
-      await this.getCarBrandList()
-    },
+    const handleRefreshTable = async () => {
+      await getCarBrandList()
+    }
+    return {
+      ...toRefs(state),
+      createCarBrand,
+      editHandle,
+      deleteHandle,
+      cancleDeleteHandle,
+      selectionChangeHandle,
+      deleteMultipleHandle,
+      closeDialog,
+      handleCurrentChange,
+      handleSizeChange,
+      handleRefreshTable,
+    }
   },
-}
+})
 </script>
 
 <style scoped>

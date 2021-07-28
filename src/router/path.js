@@ -12,6 +12,7 @@ export default {
     message: '/message', // 消息
     billType: '/billtype', // 账单类型
     payType: '/paytpe', //支付类型
+    carBrand:'/carbrand', // 汽车品牌
     to403: '/403', // 没有权限
     to404: '/404', // 找不到页面
     signin: '/signin', // 登陆
