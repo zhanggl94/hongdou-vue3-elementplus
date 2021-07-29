@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 11:31:43
+ * @LastEditTime: 2021-07-29 17:51:21
 -->
 <template>
   <div>
@@ -39,25 +39,35 @@
       <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange"
         @handleSizeChange="handleSizeChange" @handleRefreshTable="handleRefreshTable"></v-pagination>
     </div>
-    <v-pay-type-detail v-if="showDialog" ref="payTypeDetail" :payTypeId="payTypeId" @closeDialog="closeDialog"></v-pay-type-detail>
+    <v-pay-type-detail v-if="showDialog" ref="payTypeDetailRef" :payTypeId="payTypeId" @closeDialog="closeDialog"></v-pay-type-detail>
   </div>
 </template>
 
 <script>
+import {
+  defineComponent,
+  ref,
+  nextTick,
+  reactive,
+  toRefs,
+  onMounted
+} from 'vue'
 import { ElMessage } from 'element-plus'
 import vPayTypeDetail from './PayTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
 import vPagination from '../../../components/Pagination.vue'
 import payTypeACTypes from '../../../store/modules/bill/paytype/action-types'
+import store from '../../../store'
 
-export default {
+export default defineComponent({
   components: {
     vPayTypeDetail,
     vPopconfirm,
     vPagination,
   },
-  data() {
-    return {
+  setup() {
+    const payTypeDetailRef = ref(null)
+    const state = reactive({
       payTypeList: [],
       pageInfo: {
         index: 1,
@@ -71,118 +81,131 @@ export default {
       },
       payTypeId: -1,
       showDialog: false,
-    }
-  },
-  async created() {
-    await this.getPayTypeList()
-  },
-  methods: {
+    })
+
+    onMounted(async () => {
+      await getPayTypeList()
+    })
+
     // 获取支付类型列表
-    async getPayTypeList() {
+    const getPayTypeList = async () => {
       try {
-        const result = await this.$store.dispatch(
-          payTypeACTypes.PAYTYPE_SELECT,
-          { pageIndex: this.pageInfo.index, pageSize: this.pageInfo.size }
-        )
+        const result = await store.dispatch(payTypeACTypes.PAYTYPE_SELECT, {
+          pageIndex: state.pageInfo.index,
+          pageSize: state.pageInfo.size,
+        })
         if (result.data.code) {
-          this.payTypeList = result.data.data.list
-          this.pageInfo.total = result.data.data.total
+          state.payTypeList = result.data.data.list
+          state.pageInfo.total = result.data.data.total
         } else {
           ElMessage.warning(result.data.message)
         }
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 新建
-    createPayType() {
-      this.showDialog = true
-      this.payTypeId = -1
+    const createPayType = () => {
+      state.showDialog = true
+      state.payTypeId = -1
       // 子页面打开
-      this.$nextTick(() => {
-        this.$refs.payTypeDetail.openDialog()
+      nextTick(() => {
+        payTypeDetailRef.value.openDialog()
       })
-    },
+    }
     // 编辑单条
-    editHandle(index, row) {
-      this.showDialog = true
-      this.payTypeId = row.id
-      this.$nextTick(() => {
-        this.$refs.payTypeDetail.openDialog()
+    const editHandle = (index, row) => {
+      state.showDialog = true
+      state.payTypeId = row.id
+      nextTick(() => {
+        payTypeDetailRef.value.openDialog()
       })
       console.log('row', row)
-    },
+    }
     // 删除单条-popconfirm组件点击确定后触发
-    async deleteHandle(index, { id }) {
+    const deleteHandle = async (index, { id }) => {
       try {
-        const result = await this.$store.dispatch(
-          payTypeACTypes.PAYTYPE_DELETE,
-          { idList: [id] }
-        )
+        const result = await store.dispatch(payTypeACTypes.PAYTYPE_DELETE, {
+          idList: [id],
+        })
         if (result?.data?.code) {
           ElMessage.success('删除成功')
-          await this.getPayTypeList()
+          await getPayTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 取消删除后的Message-popconfirm组件点击取消后触发
-    cancleDeleteHandle() {
+    const cancleDeleteHandle = () => {
       ElMessage.info('取消删除')
-    },
+    }
     // 数据选中事件
-    selectionChangeHandle(selection) {
-      this.multipleSelection = selection
-    },
+    const selectionChangeHandle = (selection) => {
+      state.multipleSelection = selection
+    }
     // 批量删除-popconfirm组件点击确定后触发
-    async deleteMultipleHandle() {
-      if (!this.multipleSelection.length) {
+    const deleteMultipleHandle = async () => {
+      if (!state.multipleSelection.length) {
         ElMessage.warning('请选择要删除的数据')
         return
       }
       try {
         const idList = []
         let deleteType = ''
-        for (let item of this.multipleSelection) {
+        for (let item of state.multipleSelection) {
           deleteType += item.type + ' '
           idList.push(item.id)
         }
-        const result = await this.$store.dispatch(
-          payTypeACTypes.PAYTYPE_DELETE,
-          { idList }
-        )
+        const result = await store.dispatch(payTypeACTypes.PAYTYPE_DELETE, {
+          idList,
+        })
         if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
-          await this.getPayTypeList()
+          await getPayTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 当子页面关闭时，通过emit调用此方法
-    async closeDialog(isRerefreshData) {
+    const closeDialog = async (isRerefreshData) => {
       if (isRerefreshData) {
-        await this.getPayTypeList()
+        await getPayTypeList()
       }
-      this.showDialog = false
-    },
+      state.showDialog = false
+    }
     // 前进后退时触发
-    async handleCurrentChange(val) {
-      this.pageInfo.index = val
-      await this.getPayTypeList()
-    },
+    const handleCurrentChange = async (val) => {
+      state.pageInfo.index = val
+      await getPayTypeList()
+    }
     // 每页显示条数发生变化时触发
-    async handleSizeChange(val) {
-      this.pageInfo.size = val
-      await this.getPayTypeList()
-    },
+    const handleSizeChange = async (val) => {
+      state.pageInfo.size = val
+      await getPayTypeList()
+    }
     // 点击刷新按钮时触发
-    async handleRefreshTable() {
-      await this.getPayTypeList()
-    },
+    const handleRefreshTable = async () => {
+      await getPayTypeList()
+    }
+
+    return {
+      payTypeDetailRef,
+      ...toRefs(state),
+      createPayType,
+      editHandle,
+      deleteHandle,
+      cancleDeleteHandle,
+      selectionChangeHandle,
+      deleteMultipleHandle,
+      closeDialog,
+      handleCurrentChange,
+      handleSizeChange,
+      handleRefreshTable,
+    }
   },
-}
+})
 </script>
 
 <style scoped>

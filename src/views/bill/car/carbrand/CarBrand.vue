@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 18:04:10
+ * @LastEditTime: 2021-07-29 17:23:01
 -->
 <template>
   <div>
@@ -39,7 +39,7 @@
       <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange"
         @handleSizeChange="handleSizeChange" @handleRefreshTable="handleRefreshTable"></v-pagination>
     </div>
-    <v-car-brand-detail v-if="showDialog" ref="carBrandDetail" :carBrandId="carBrandId" @closeDialog="closeDialog"></v-car-brand-detail>
+    <v-car-brand-detail v-if="showDialog" ref="carBrandDetailRef" :carBrandId="carBrandId" @closeDialog="closeDialog"></v-car-brand-detail>
   </div>
 </template>
 
@@ -59,7 +59,7 @@ export default defineComponent({
     vPagination,
   },
   setup() {
-    const carBrandDetail = ref(null) // 在Componsition api下如果想访问 this.$refs，需要声明一个ref变量(变量名需要与Form表单的ref一样)
+    const carBrandDetailRef = ref(null) // 在Componsition api下如果想访问 this.$refs，需要声明一个ref变量(变量名需要与子组件的ref一样)
     const state = reactive({
       carBrandList: [],
       pageInfo: {
@@ -103,7 +103,7 @@ export default defineComponent({
       state.carBrandId = -1
       // 子页面打开
       nextTick(() => {
-        carBrandDetail.value.openDialog()
+        carBrandDetailRef.value.openDialog()
       })
     }
     // 编辑单条
@@ -111,7 +111,7 @@ export default defineComponent({
       state.showDialog = true
       state.carBrandId = row.id
       nextTick(() => {
-        carBrandDetail.value.openDialog()
+        carBrandDetailRef.value.openDialog()
       })
       console.log('row', row)
     }
@@ -119,7 +119,7 @@ export default defineComponent({
     const deleteHandle = async (index, { id }) => {
       try {
         const result = await store.dispatch(
-          carBrandACTypes.PAYTYPE_DELETE,
+          carBrandACTypes.CARBRAND_DELETE,
           { idList: [id] }
         )
         if (result?.data?.code) {
@@ -148,11 +148,11 @@ export default defineComponent({
         const idList = []
         let deleteType = ''
         for (let item of state.multipleSelection) {
-          deleteType += item.type + ' '
+          deleteType += item.brand + ' '
           idList.push(item.id)
         }
         const result = await store.dispatch(
-          carBrandACTypes.PAYTYPE_DELETE,
+          carBrandACTypes.CARBRAND_DELETE,
           { idList }
         )
         if (result.data.code) {
@@ -186,6 +186,7 @@ export default defineComponent({
     }
     return {
       ...toRefs(state),
+      carBrandDetailRef,
       createCarBrand,
       editHandle,
       deleteHandle,
