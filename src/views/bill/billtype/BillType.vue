@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-07-02 22:17:44
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 16:38:01
+ * @LastEditTime: 2021-08-16 14:58:30
 -->
 <template>
   <div>
@@ -39,25 +39,28 @@
       <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange"
         @handleSizeChange="handleSizeChange" @handleRefreshTable="handleRefreshTable"></v-pagination>
     </div>
-    <v-bill-type-detail v-if="showDialog" ref="billTypeDetail" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
+    <v-bill-type-detail v-if="showDialog" ref="billTypeDetailRef" :billTypeId="billTypeId" @closeDialog="closeDialog"></v-bill-type-detail>
   </div>
 </template>
 
 <script>
+import { defineComponent, reactive, onMounted, toRefs, ref, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import vBillTypeDetail from './BillTypeDetail.vue'
 import vPopconfirm from '../../../components/Popconfirm.vue'
 import vPagination from '../../../components/Pagination.vue'
 import billTypeACTypes from '../../../store/modules/bill/billtype/action-types'
+import store from '../../../store'
 
-export default {
+export default defineComponent({
   components: {
     vBillTypeDetail,
     vPopconfirm,
     vPagination,
   },
-  data() {
-    return {
+  setup() {
+    const billTypeDetailRef = ref(null)
+    const state = reactive({
       billTypeList: [],
       pageInfo: {
         index: 1,
@@ -71,118 +74,132 @@ export default {
       },
       billTypeId: -1,
       showDialog: false,
-    }
-  },
-  async created() {
-    await this.getBillTypeList()
-  },
-  methods: {
-    // 获取账单类型列表
-    async getBillTypeList() {
+    })
+
+    onMounted(async () => {
+      await getBillTypeList()
+    })
+
+    // 获取账单列表
+    const getBillTypeList = async () => {
       try {
-        const result = await this.$store.dispatch(
-          billTypeACTypes.BILLTYPE_SELECT,
-          { pageIndex: this.pageInfo.index, pageSize: this.pageInfo.size }
-        )
+        const result = await store.dispatch(billTypeACTypes.BILLTYPE_SELECT, {
+          pageIndex: state.pageInfo.index,
+          pageSize: state.pageInfo.size,
+        })
         if (result.data.code) {
-          this.billTypeList = result.data.data.list
-          this.pageInfo.total = result.data.data.total
+          state.billTypeList = result.data.data.list
+          state.pageInfo.total = result.data.data.total
         } else {
           ElMessage.warning(result.data.message)
         }
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 新建
-    createBillType() {
-      this.showDialog = true
-      this.billTypeId = -1
+    const createBillType = () => {
+      state.showDialog = true
+      state.billTypeId = -1
       // 子页面打开
-      this.$nextTick(() => {
-        this.$refs.billTypeDetail.openDialog()
+      nextTick(() => {
+        billTypeDetailRef.value.openDialog()
       })
-    },
+    }
     // 编辑单条
-    editHandle(index, row) {
-      this.showDialog = true
-      this.billTypeId = row.id
-      this.$nextTick(() => {
-        this.$refs.billTypeDetail.openDialog()
+    const editHandle = (index, row) => {
+      state.showDialog = true
+      state.billTypeId = row.id
+      nextTick(() => {
+        billTypeDetailRef.value.openDialog()
       })
-      console.log('row', row)
-    },
+    }
     // 删除单条-popconfirm组件点击确定后触发
-    async deleteHandle(index, { id }) {
+    const deleteHandle = async (index, { id }) => {
       try {
-        const result = await this.$store.dispatch(
+        const result = await store.dispatch(
           billTypeACTypes.BILLTYPE_DELETE,
           { idList: [id] }
         )
         if (result?.data?.code) {
           ElMessage.success('删除成功')
-          await this.getBillTypeList()
+          await getBillTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 取消删除后的Message-popconfirm组件点击取消后触发
-    cancleDeleteHandle() {
+    const cancleDeleteHandle = () => {
       ElMessage.info('取消删除')
-    },
+    }
     // 数据选中事件
-    selectionChangeHandle(selection) {
-      this.multipleSelection = selection
-    },
+    const selectionChangeHandle = (selection) => {
+      state.multipleSelection = selection
+    }
     // 批量删除-popconfirm组件点击确定后触发
-    async deleteMultipleHandle() {
-      if (!this.multipleSelection.length) {
+    const deleteMultipleHandle = async () => {
+      if (!state.multipleSelection.length) {
         ElMessage.warning('请选择要删除的数据')
         return
       }
       try {
         const idList = []
         let deleteType = ''
-        for (let item of this.multipleSelection) {
+        for (let item of state.multipleSelection) {
           deleteType += item.type + ' '
           idList.push(item.id)
         }
-        const result = await this.$store.dispatch(
+        const result = await store.dispatch(
           billTypeACTypes.BILLTYPE_DELETE,
           { idList }
         )
         if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
-          await this.getBillTypeList()
+          await getBillTypeList()
         } else ElMessage.warning(result.data.message)
       } catch (error) {
         console.error(error)
       }
-    },
+    }
     // 当子页面关闭时，通过emit调用此方法
-    async closeDialog(isRerefreshData) {
+    const closeDialog = async (isRerefreshData) => {
       if (isRerefreshData) {
-        await this.getBillTypeList()
+        await getBillTypeList()
       }
-      this.showDialog = false
-    },
+      state.showDialog = false
+    }
     // 前进后退时触发
-    async handleCurrentChange(val) {
-      this.pageInfo.index = val
-      await this.getBillTypeList()
-    },
+    const handleCurrentChange = async (val) => {
+      state.pageInfo.index = val
+      await getBillTypeList()
+    }
     // 每页显示条数发生变化时触发
-    async handleSizeChange(val) {
-      this.pageInfo.size = val
-      await this.getBillTypeList()
-    },
+    const handleSizeChange = async (val) => {
+      state.pageInfo.size = val
+      await getBillTypeList()
+    }
     // 点击刷新按钮时触发
-    async handleRefreshTable() {
-      await this.getBillTypeList()
-    },
+    const handleRefreshTable = async () => {
+      await getBillTypeList()
+    }
+
+    return {
+      billTypeDetailRef,
+      ...toRefs(state),
+      createBillType,
+      editHandle,
+      deleteHandle,
+      cancleDeleteHandle,
+      selectionChangeHandle,
+      deleteMultipleHandle,
+      closeDialog,
+      handleCurrentChange,
+      handleSizeChange,
+      handleRefreshTable,
+    }
   },
-}
+})
 </script>
 
 <style scoped>
