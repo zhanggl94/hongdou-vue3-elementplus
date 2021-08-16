@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-06-23 13:57:23
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 16:33:05
+ * @LastEditTime: 2021-08-16 15:21:30
 -->
 
 <template>
@@ -66,6 +66,10 @@ export default {
             {
               index: path.carBrand,
               title: '汽车品牌',
+            },
+            {
+              index: path.car,
+              title: '汽车信息',
             },
           ],
         },

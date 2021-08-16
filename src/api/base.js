@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:28:11
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 11:29:46
+ * @LastEditTime: 2021-08-16 16:16:32
  */
 
 export default {
@@ -25,10 +25,16 @@ export default {
       edit:'/paytype/edit',
       delete:'/paytype/delete',
     },
-    carBrand:{ // 支付类型
+    carBrand:{ // 汽车品牌
       select:'/carbrand/select',
       create:'/carbrand/create',
       edit:'/carbrand/edit',
       delete:'/carbrand/delete',
-    }
+    },
+    car:{ // 汽车信息
+      select:'/car/select',
+      create:'/car/create',
+      edit:'/car/edit',
+      delete:'/car/delete',
+    },
 }
