@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-28 14:50:54
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-16 16:22:23
+ * @LastEditTime: 2021-08-17 17:35:32
 -->
 <template>
   <div>
@@ -24,7 +24,9 @@
       </div>
       <el-table :data="carList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
-        <el-table-column prop="brand" width="200px" label="名称"></el-table-column>
+        <el-table-column prop="name" width="200px" label="名称"></el-table-column>
+        <el-table-column prop="brand" width="200px" label="品牌"></el-table-column>
+        <el-table-column prop="isDefault" width="200px" label="是否默认"></el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">
@@ -44,7 +46,14 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, toRefs, ref, nextTick  } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  toRefs,
+  ref,
+  nextTick,
+} from 'vue'
 import { ElMessage } from 'element-plus'
 import vCarDetail from './CarDetail'
 import vPopconfirm from '../../../../components/Popconfirm.vue'
@@ -83,10 +92,11 @@ export default defineComponent({
     // 获取汽车信息列表
     const getCarList = async () => {
       try {
-        const result = await store.dispatch(
-          carACTypes.CARBRAND_SELECT,
-          { pageIndex: state.pageInfo.index, pageSize: state.pageInfo.size }
-        )
+        const result = await store.dispatch(carACTypes.CAR_SELECT, {
+          userId: store.state.user.id,
+          pageIndex: state.pageInfo.index,
+          pageSize: state.pageInfo.size,
+        })
         if (result.data.code) {
           state.carList = result.data.data.list
           state.pageInfo.total = result.data.data.total
@@ -118,10 +128,9 @@ export default defineComponent({
     // 删除单条-popconfirm组件点击确定后触发
     const deleteHandle = async (index, { id }) => {
       try {
-        const result = await store.dispatch(
-          carACTypes.CARBRAND_DELETE,
-          { idList: [id] }
-        )
+        const result = await store.dispatch(carACTypes.CARBRAND_DELETE, {
+          idList: [id],
+        })
         if (result?.data?.code) {
           ElMessage.success('删除成功')
           await getCarList()
@@ -151,10 +160,9 @@ export default defineComponent({
           deleteType += item.brand + ' '
           idList.push(item.id)
         }
-        const result = await store.dispatch(
-          carACTypes.CARBRAND_DELETE,
-          { idList }
-        )
+        const result = await store.dispatch(carACTypes.CARBRAND_DELETE, {
+          idList,
+        })
         if (result.data.code) {
           ElMessage.success(deleteType + '被删除成功')
           await getCarList()

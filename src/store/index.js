@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 21:44:58
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 16:26:04
+ * @LastEditTime: 2021-08-17 17:51:38
  */
 
 import { Store } from 'vuex'
@@ -14,6 +14,7 @@ import tags from './modules/tags'
 import billType from './modules/bill/billtype'
 import payType from './modules/bill/paytype'
 import carBrand from './modules/bill/car/carbrand'
+import car from './modules/bill/car/car'
 
 export default new Store({
   state: {
@@ -38,5 +39,6 @@ export default new Store({
     billType,
     payType,
     carBrand,
+    car,
   }
 })
