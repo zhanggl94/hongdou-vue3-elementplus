@@ -4,13 +4,13 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-28 17:29:11
+ * @LastEditTime: 2021-08-19 16:09:21
 -->
 <template>
   <div class="form-box">
     <el-dialog :title="formMode.text+'-汽车品牌'" v-model="dialogVisible" width="40%">
-      <el-form label-width="70px" label-position="right" :model="carBrandInfo" ref="carBrandForm" :rules="rules">
-        <el-form-item label="汽车品牌" prop="brand" required>
+      <el-form label-width="80px" label-position="right" :model="carBrandInfo" ref="carBrandForm" :rules="rules">
+        <el-form-item label="汽车品牌" prop="brand">
           <el-input type="input" v-model="carBrandInfo.brand" class="small-input"></el-input>
         </el-form-item>
         <el-form-item label="备注">
@@ -37,7 +37,7 @@ import {
   computed,
   toRefs,
 } from 'vue'
-import { validateNull } from '../../../../utils/utils'
+import { validateStrNull } from '../../../../utils/utils'
 import store from '../../../../store' // 引入vuex的store
 import carBrandACTypes from '../../../../store/modules/bill/car/carbrand/action-types'
 import constants from '../../../../utils/constants'
@@ -61,8 +61,12 @@ export default defineComponent({
         note: '',
       },
       rules: {
-        type: [
-          { validator: validateNull.bind(this, '请输入类型'), trigger: 'blur' },
+        brand: [
+          {
+            required: true,
+            validator: validateStrNull.bind(this, '请输入品牌'),
+            trigger: 'blur',
+          },
         ],
       },
       dialogVisible: false,

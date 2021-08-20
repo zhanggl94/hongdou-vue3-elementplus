@@ -45,7 +45,7 @@
 import userACTypes from '../store/modules/user/action-types'
 import vGitHub from '../components/GitHubRepository.vue'
 import { ElMessage } from 'element-plus'
-import { validateNull } from '../utils/utils'
+import { validateStrNull } from '../utils/utils'
 
 export default {
   components: {
@@ -68,13 +68,13 @@ export default {
       rules: {
         username: [
           {
-            validator: validateNull.bind(this, '请输入用户名'),
+            validator: validateStrNull.bind(this, '请输入用户名'),
             trigger: 'blur',
           },
         ],
         password: [
           {
-            validator: validateNull.bind(this, '请输入密码'),
+            validator: validateStrNull.bind(this, '请输入密码'),
             trigger: 'blur',
           },
         ],

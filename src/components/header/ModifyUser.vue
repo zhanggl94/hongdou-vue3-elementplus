@@ -34,7 +34,7 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { validateNull } from '../../utils/utils'
+import { validateStrNull } from '../../utils/utils'
 import userACTypes from '../../store/modules/user/action-types'
 import userMUTypes from '../../store/modules/user/mutation-types'
 
@@ -56,13 +56,13 @@ export default {
       rules: {
         oldPassword: [
           {
-            validator: validateNull.bind(this, '请输入旧密码'),
+            validator: validateStrNull.bind(this, '请输入旧密码'),
             trigger: 'blur',
           },
         ],
         newPassword: [
           {
-            validator: validateNull.bind(this, '请输入新密码'),
+            validator: validateStrNull.bind(this, '请输入新密码'),
             trigger: 'blur',
           },
         ],
