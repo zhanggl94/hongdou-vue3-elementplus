@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 15:32:05
+ * @LastEditTime: 2021-08-20 17:30:12
  */
 
 import axios from 'axios'
@@ -81,12 +81,15 @@ const errHandle = (status, other) => {
         case 403:
             ElMessage.error('权限不足')
             toRouter(routerPath.to403)
-            break;
+            break
         // 404请求不存在
         case 404:
             ElMessage.error('页面不存在')
             toRouter(routerPath.to404)
-            break;
+            break
+        case 500:
+            ElMessage.error('服务器错误')
+            break
         default:
             console.error(other)
             ElMessage.error(other)

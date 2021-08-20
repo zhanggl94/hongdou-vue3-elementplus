@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-28 14:50:54
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-17 17:35:32
+ * @LastEditTime: 2021-08-20 17:56:50
 -->
 <template>
   <div>
@@ -25,7 +25,7 @@
       <el-table :data="carList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
         <el-table-column type="selection" width="50"> </el-table-column>
         <el-table-column prop="name" width="200px" label="名称"></el-table-column>
-        <el-table-column prop="brand" width="200px" label="品牌"></el-table-column>
+        <el-table-column prop="brand.brand" width="200px" label="品牌"></el-table-column>
         <el-table-column prop="isDefault" width="200px" label="是否默认"></el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">

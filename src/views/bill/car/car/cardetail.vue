@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-20 13:45:59
+ * @LastEditTime: 2021-08-20 17:41:36
 -->
 
 <template>
@@ -113,6 +113,7 @@ export default defineComponent({
       try {
         const result = await store.dispatch(carACTypes.CAR_SELECT, {
           id: props.carId,
+          userId: store.state.user.id,
         })
         if (result.data.code) state.carInfo = result.data.data
         else ElMessage.warning(result.data.message)
