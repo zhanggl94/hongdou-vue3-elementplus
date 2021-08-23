@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 14:49:13
+ * @LastEditTime: 2021-08-23 20:31:45
 -->
 
 <template>
@@ -35,8 +35,11 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog :title="'查询-'+dialogSearch.title" v-model="dialogSearch.visible" width="40%">
-      <v-query-list :dataList='dialogSearch.data'></v-query-list>
+    <el-dialog v-model="dialogSearch.visible" width="40%">
+      <template #title>
+        <span class="dialog-title">查询-{{dialogSearch.title}}</span>
+      </template>
+      <v-query-list :dataList="dialogSearch.data"></v-query-list>
     </el-dialog>
   </div>
 </template>
@@ -51,7 +54,11 @@ import {
   computed,
   toRefs,
 } from 'vue'
-import { validateStrNull, getCarBrandSearchList } from '../../../../utils/utils'
+import {
+  validateStrNull,
+  getCarBrandColumnMap,
+  getCarBrandSearchList,
+} from '../../../../utils/utils'
 import store from '../../../../store' // 引入vuex的store
 import carACTypes from '../../../../store/modules/bill/car/car/action-types'
 import carBrandACTypes from '../../../../store/modules/bill/car/carbrand/action-types'
@@ -59,7 +66,7 @@ import constants from '../../../../utils/constants'
 import vQueryList from '../../../../components/QueryList.vue'
 
 export default defineComponent({
-  components: [vQueryList],
+  components: { vQueryList },
   emits: ['closeDialog'],
   props: {
     carId: {
@@ -102,6 +109,7 @@ export default defineComponent({
       dialogSearch: {
         visible: false,
         data: [],
+        columnMap: {},
         title: '',
       },
     })
@@ -171,10 +179,11 @@ export default defineComponent({
         })
         if (result.data.code) {
           if (result?.data?.data?.list?.length) {
-
-            state.dialogSearch.data = getCarBrandSearchList(
-              result.data.data.list
-            )
+            // state.dialogSearch.data = getCarBrandSearchList(
+            //   result.data.data.list
+            // )
+            state.dialogSearch.data = result.data.data.list
+            state.dialogSearch.columnMap = getCarBrandColumnMap()
             state.dialogSearch.title = '汽车品牌'
             state.dialogSearch.visible = true
           }
@@ -210,6 +219,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.dialog-title {
+  font-weight: bolder;
+}
 .search-icon {
   font-size: 22px;
 }

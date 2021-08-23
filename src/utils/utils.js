@@ -4,7 +4,7 @@
  * @Author: zhanggl
  * @Date: 2021-06-18 22:18:42
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 14:42:15
+ * @LastEditTime: 2021-08-23 20:32:51
  */
 
 export const setToken = (token) => localStorage.setItem('token', token)
@@ -65,3 +65,12 @@ export const getCarBrandSearchList = list => list.reduce(
             acc.push(list)
         return acc
     }, [])
+
+
+export const getCarBrandColumnMap = () => {
+    const columnMap = new Map()
+    columnMap.set('id', 'ID')
+    columnMap.set('brand', '品牌')
+    columnMap.set('note', '备注')
+    return columnMap
+}
