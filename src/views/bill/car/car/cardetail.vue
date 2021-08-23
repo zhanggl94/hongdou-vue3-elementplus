@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 09:31:42
+ * @LastEditTime: 2021-08-23 14:49:13
 -->
 
 <template>
@@ -15,7 +15,11 @@
           <el-input type="input" v-model="carInfo.name" class="small-input"></el-input>
         </el-form-item>
         <el-form-item label="品牌" prop="brand.brand">
-          <el-input type="input" v-model="carInfo.brand.brand" class="small-input"></el-input>
+          <el-input type="input" :readonly=true placeholder="点击查找" @click="searchCarBrand" v-model="carInfo.brand.brand" class="small-input">
+            <template #suffix>
+              <i class="el-icon-search search-icon"></i>
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="是否默认" prop="isDefault">
           <el-checkbox v-model="carInfo.isDefault" true-label=1 false-label=0></el-checkbox>
@@ -31,6 +35,9 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog :title="'查询-'+dialogSearch.title" v-model="dialogSearch.visible" width="40%">
+      <v-query-list :dataList='dialogSearch.data'></v-query-list>
+    </el-dialog>
   </div>
 </template>
 
@@ -44,12 +51,15 @@ import {
   computed,
   toRefs,
 } from 'vue'
-import { validateStrNull } from '../../../../utils/utils'
+import { validateStrNull, getCarBrandSearchList } from '../../../../utils/utils'
 import store from '../../../../store' // 引入vuex的store
 import carACTypes from '../../../../store/modules/bill/car/car/action-types'
+import carBrandACTypes from '../../../../store/modules/bill/car/carbrand/action-types'
 import constants from '../../../../utils/constants'
+import vQueryList from '../../../../components/QueryList.vue'
 
 export default defineComponent({
+  components: [vQueryList],
   emits: ['closeDialog'],
   props: {
     carId: {
@@ -88,6 +98,12 @@ export default defineComponent({
         },
       },
       dialogVisible: false,
+      carBrandList: [],
+      dialogSearch: {
+        visible: false,
+        data: [],
+        title: '',
+      },
     })
 
     // 表单模式
@@ -145,6 +161,31 @@ export default defineComponent({
       })
     }
 
+    // 获取汽车品牌的所有数据-给查询页面使用
+    const searchCarBrand = async () => {
+      try {
+        const result = await store.dispatch(carBrandACTypes.CARBRAND_SELECT, {
+          userId: store.state.user.id,
+          pageIndex: 1,
+          pageSize: constants.pageSizeDefault,
+        })
+        if (result.data.code) {
+          if (result?.data?.data?.list?.length) {
+
+            state.dialogSearch.data = getCarBrandSearchList(
+              result.data.data.list
+            )
+            state.dialogSearch.title = '汽车品牌'
+            state.dialogSearch.visible = true
+          }
+        } else {
+          ElMessage.warning(result.message)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
     // 生命周期函数
     onMounted(async () => {
       if (formMode.value.type === constants.formMode.edit) {
@@ -162,7 +203,14 @@ export default defineComponent({
       closeDialog,
       saveCarInfo,
       formMode,
+      searchCarBrand,
     }
   },
 })
 </script>
+
+<style scoped>
+.search-icon {
+  font-size: 22px;
+}
+</style>

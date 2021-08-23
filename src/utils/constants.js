@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-21 08:58:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-07-22 16:07:45
+ * @LastEditTime: 2021-08-23 11:37:44
  */
 export default {
     formMode: { // 表单模式
@@ -23,5 +23,6 @@ export default {
             title: '警告',
             iconClass: 'el-icon-warning',
         }
-    }
+    },
+    pageSizeDefault: 10,
 }
