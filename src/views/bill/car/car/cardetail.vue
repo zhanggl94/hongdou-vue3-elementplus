@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-20 17:41:36
+ * @LastEditTime: 2021-08-23 09:31:42
 -->
 
 <template>
@@ -125,7 +125,6 @@ export default defineComponent({
     // 保存
     const saveCarInfo = () => {
       carForm.value.validate(async (valid) => {
-        console.log('valid: ', valid)
         if (valid) {
           try {
             // 判断接口类型
