@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 20:31:45
+ * @LastEditTime: 2021-08-24 17:28:09
 -->
 
 <template>
@@ -35,12 +35,8 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogSearch.visible" width="40%">
-      <template #title>
-        <span class="dialog-title">查询-{{dialogSearch.title}}</span>
-      </template>
-      <v-query-list :dataList="dialogSearch.data"></v-query-list>
-    </el-dialog>
+    <v-query-list v-if="dialogSearch.visible" ref="vQueryListRef" :title="dialogSearch.title" :width="dialogSearch.width"
+      :queryData="dialogSearch.data" :columnMap="dialogSearch.columnMap"></v-query-list>
   </div>
 </template>
 
@@ -53,12 +49,9 @@ import {
   onMounted,
   computed,
   toRefs,
+  nextTick,
 } from 'vue'
-import {
-  validateStrNull,
-  getCarBrandColumnMap,
-  getCarBrandSearchList,
-} from '../../../../utils/utils'
+import { validateStrNull, getCarBrandColumnMap } from '../../../../utils/utils'
 import store from '../../../../store' // 引入vuex的store
 import carACTypes from '../../../../store/modules/bill/car/car/action-types'
 import carBrandACTypes from '../../../../store/modules/bill/car/carbrand/action-types'
@@ -77,6 +70,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const carForm = ref(null) // 在Componsition api下如果想访问 this.$refs，需要声明一个ref变量(变量名需要与Form表单的ref一样)
+    const vQueryListRef = ref(null)
     const state = reactive({
       carInfo: {
         id: props.carId,
@@ -107,10 +101,10 @@ export default defineComponent({
       dialogVisible: false,
       carBrandList: [],
       dialogSearch: {
-        visible: false,
         data: [],
         columnMap: {},
         title: '',
+        visible: false,
       },
     })
 
@@ -173,19 +167,18 @@ export default defineComponent({
     const searchCarBrand = async () => {
       try {
         const result = await store.dispatch(carBrandACTypes.CARBRAND_SELECT, {
-          userId: store.state.user.id,
           pageIndex: 1,
           pageSize: constants.pageSizeDefault,
         })
         if (result.data.code) {
-          if (result?.data?.data?.list?.length) {
-            // state.dialogSearch.data = getCarBrandSearchList(
-            //   result.data.data.list
-            // )
-            state.dialogSearch.data = result.data.data.list
+          if (result?.data?.data) {
+            state.dialogSearch.data = result.data.data
             state.dialogSearch.columnMap = getCarBrandColumnMap()
             state.dialogSearch.title = '汽车品牌'
             state.dialogSearch.visible = true
+            nextTick(() => {
+              vQueryListRef.value.openDialog()
+            })
           }
         } else {
           ElMessage.warning(result.message)
@@ -213,15 +206,13 @@ export default defineComponent({
       saveCarInfo,
       formMode,
       searchCarBrand,
+      vQueryListRef,
     }
   },
 })
 </script>
 
 <style scoped>
-.dialog-title {
-  font-weight: bolder;
-}
 .search-icon {
   font-size: 22px;
 }

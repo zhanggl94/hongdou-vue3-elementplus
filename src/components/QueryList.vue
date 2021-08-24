@@ -4,59 +4,95 @@
  * @Autor: zhanggl
  * @Date: 2021-08-17 16:58:43
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 20:31:43
+ * @LastEditTime: 2021-08-24 19:10:52
 -->
 <template>
-  <div>
-    <el-table :data="dataList" tooltip-effect="dark" border style="width: 100%" ref="multipleTable" @selection-change="selectionChangeHandle">
-      <!-- <template v-for="(item,index) in dataList" :key="index">
-        <el-table-column v-if="item.isShow" :prop="item.key" label="item.title" :width="item.width"></el-table-column>
-      </template> -->
-      <el-table-column v-for="item in columnMap" :prop="item[0]" :label="item[1]" :key="item[0]" :width="item.width">
-      </el-table-column>
-      <!-- <el-table-column type="selection" width="50"> </el-table-column>
-      <el-table-column prop="brand" width="200px" label="品牌"></el-table-column>
-      <el-table-column prop="note" label="备注"></el-table-column>
-      <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
-        <template #default="scope">
-          <el-button type="text" icon="el-icon-edit" @click="editHandle(scope.$index, scope.row)">编辑</el-button>
-          <v-popconfirm :message="deletePop.message" :placement="deletePop.placement" @okHandle="deleteHandle(scope.$index, scope.row)"
-            @cancleHandle="cancleDeleteHandle">
-            <el-button type="text" icon="el-icon-delete" class="red">删除</el-button>
-          </v-popconfirm>
-        </template>
-      </el-table-column> -->
+  <el-dialog v-model="dialogVisible" :width="dialogWidth">
+    <template #title>
+      <span class="dialog-title">查询-{{dialogTitle}}</span>
+    </template>
+    <el-table :data="dataList" tooltip-effect="dark" border style="width: 100%" highlight-current-row @current-change="selectRow">
+      <template v-for="item in columnMap" :key="item[0]">
+        <el-table-column v-if="item[1].isShow" :prop="item[0]" :label="item[1].title" :width="item[1].width">
+        </el-table-column>
+      </template>
     </el-table>
-    <!-- <v-pagination :isHidden="pageInfo.total<1" :total="pageInfo.total" @handleCurrentChange="handleCurrentChange" @handleSizeChange="handleSizeChange"
-      @handleRefreshTable="handleRefreshTable"></v-pagination> -->
-  </div>
+    <v-pagination :isHidden="dataTotal<1" :total="dataTotal" @handleCurrentChange="handleCurrentChange" @handleSizeChange="handleSizeChange"
+      @handleRefreshTable="handleRefreshTable"></v-pagination>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="saveSelectValue">确定</el-button>
+        <el-button @click="closeDialog">取消</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
 import { defineComponent, reactive, toRefs } from 'vue'
+import vPagination from '../components/Pagination.vue'
 
 export default defineComponent({
+  components: { vPagination },
   props: {
-    dataList: {
+    queryData: {
+      types: Object,
+      require: true,
+      default: {},
+    },
+    columnMap: {
       types: Array,
       require: true,
       default: [],
     },
-    columnMap: {
-      types: Map,
-      require: true,
-      default: new Map(),
+    title: {
+      types: String,
+      require: false,
+      default: '',
+    },
+    width: {
+      type: String,
+      require: false,
+      default: '40%',
     },
   },
   setup(props) {
     const state = reactive({
-      dataList: props.dataList,
-      columnMap:props.columnMap,
+      dataList: props.queryData.list,
+      columnMap: props.columnMap,
+      dataTotal: props.queryData.total,
+      dialogWidth: props.width,
+      dialogTitle: props.title,
+      dialogVisible: false,
     })
+
+    const openDialog = () => {
+      state.dialogVisible = true
+    }
+
+    const closeDialog = () => {
+      state.dialogVisible = false
+    }
+
+    const selectRow = (val) => {
+      console.log('val: ', val)
+    }
+
+    const saveSelectValue = () => {}
 
     return {
       ...toRefs(state),
+      openDialog,
+      closeDialog,
+      selectRow,
+      saveSelectValue,
     }
   },
 })
 </script>
+
+<style scoped>
+.dialog-title {
+  font-weight: bolder;
+}
+</style>
