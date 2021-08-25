@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-24 17:28:09
+ * @LastEditTime: 2021-08-25 20:23:23
 -->
 
 <template>
@@ -35,8 +35,8 @@
         </span>
       </template>
     </el-dialog>
-    <v-query-list v-if="dialogSearch.visible" ref="vQueryListRef" :title="dialogSearch.title" :width="dialogSearch.width"
-      :queryData="dialogSearch.data" :columnMap="dialogSearch.columnMap"></v-query-list>
+    <v-query-list v-if="dialogSearch.visible" ref="vQueryListRef" :target="dialogSearch.target" :title="dialogSearch.title"
+      :width="dialogSearch.width" :queryData="dialogSearch.data" :columnMap="dialogSearch.columnMap" @clickOk="selectQuery"></v-query-list>
   </div>
 </template>
 
@@ -101,6 +101,7 @@ export default defineComponent({
       dialogVisible: false,
       carBrandList: [],
       dialogSearch: {
+        target: '',
         data: [],
         columnMap: {},
         title: '',
@@ -118,9 +119,12 @@ export default defineComponent({
       return formMode
     })
 
+    // 打开CarDetail的Dialog
     const openDialog = () => {
       state.dialogVisible = true
     }
+
+    // 关闭CarDetail的Dialog并将关闭事件发送到父页面
     const closeDialog = (isRerefreshData) => {
       state.dialogVisible = false
       emit('closeDialog', isRerefreshData)
@@ -176,6 +180,7 @@ export default defineComponent({
             state.dialogSearch.columnMap = getCarBrandColumnMap()
             state.dialogSearch.title = '汽车品牌'
             state.dialogSearch.visible = true
+            state.dialogSearch.target = constants.queryListTarget.car
             nextTick(() => {
               vQueryListRef.value.openDialog()
             })
@@ -185,6 +190,21 @@ export default defineComponent({
         }
       } catch (error) {
         console.error(error)
+      }
+    }
+
+    // 查询页面点击OK按钮事件的监听事件
+    const selectQuery = (queryResult) => {
+      switch (queryResult.target) {
+        case constants.queryListTarget.car:
+          state.carInfo.brand = queryResult.data
+          // 单独校验汽车品牌字段
+          carForm.value.validateField('brand.brand',brandError =>{
+            if(brandError ){
+              return false;
+            }
+          })
+          break
       }
     }
 
@@ -207,6 +227,7 @@ export default defineComponent({
       formMode,
       searchCarBrand,
       vQueryListRef,
+      selectQuery,
     }
   },
 })
@@ -214,6 +235,6 @@ export default defineComponent({
 
 <style scoped>
 .search-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 </style>

@@ -4,24 +4,26 @@
  * @Autor: zhanggl
  * @Date: 2021-08-17 16:58:43
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-24 19:10:52
+ * @LastEditTime: 2021-08-25 20:02:27
 -->
 <template>
   <el-dialog v-model="dialogVisible" :width="dialogWidth">
     <template #title>
       <span class="dialog-title">查询-{{dialogTitle}}</span>
     </template>
-    <el-table :data="dataList" tooltip-effect="dark" border style="width: 100%" highlight-current-row @current-change="selectRow">
-      <template v-for="item in columnMap" :key="item[0]">
-        <el-table-column v-if="item[1].isShow" :prop="item[0]" :label="item[1].title" :width="item[1].width">
-        </el-table-column>
-      </template>
-    </el-table>
+    <div class="query-content">
+      <el-table :data="dataList" tooltip-effect="dark" border style="width: 100%" highlight-current-row @current-change="changeCurrentRow">
+        <template v-for="item in columnMap" :key="item[0]">
+          <el-table-column v-if="item[1].isShow" :prop="item[0]" :label="item[1].title" :width="item[1].width">
+          </el-table-column>
+        </template>
+      </el-table>
+    </div>
     <v-pagination :isHidden="dataTotal<1" :total="dataTotal" @handleCurrentChange="handleCurrentChange" @handleSizeChange="handleSizeChange"
       @handleRefreshTable="handleRefreshTable"></v-pagination>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="saveSelectValue">确定</el-button>
+        <el-button type="primary" @click="clickOk">确定</el-button>
         <el-button @click="closeDialog">取消</el-button>
       </span>
     </template>
@@ -33,8 +35,14 @@ import { defineComponent, reactive, toRefs } from 'vue'
 import vPagination from '../components/Pagination.vue'
 
 export default defineComponent({
+  emits: ['clickOk'],
   components: { vPagination },
   props: {
+    target: {
+      types: String,
+      required: true,
+      default: '',
+    },
     queryData: {
       types: Object,
       require: true,
@@ -56,7 +64,7 @@ export default defineComponent({
       default: '40%',
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const state = reactive({
       dataList: props.queryData.list,
       columnMap: props.columnMap,
@@ -64,6 +72,7 @@ export default defineComponent({
       dialogWidth: props.width,
       dialogTitle: props.title,
       dialogVisible: false,
+      currentRow: {},
     })
 
     const openDialog = () => {
@@ -74,18 +83,21 @@ export default defineComponent({
       state.dialogVisible = false
     }
 
-    const selectRow = (val) => {
-      console.log('val: ', val)
+    const changeCurrentRow = (val) => {
+      state.currentRow = val
     }
 
-    const saveSelectValue = () => {}
+    const clickOk = () => {
+      closeDialog()
+      emit('clickOk', { target: props.target, data: state.currentRow })
+    }
 
     return {
       ...toRefs(state),
       openDialog,
       closeDialog,
-      selectRow,
-      saveSelectValue,
+      changeCurrentRow,
+      clickOk,
     }
   },
 })
@@ -94,5 +106,9 @@ export default defineComponent({
 <style scoped>
 .dialog-title {
   font-weight: bolder;
+}
+.query-content {
+  overflow: auto;
+  margin: 0 10px;
 }
 </style>

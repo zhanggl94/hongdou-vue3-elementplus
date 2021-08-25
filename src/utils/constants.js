@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-21 08:58:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-23 11:37:44
+ * @LastEditTime: 2021-08-25 19:32:48
  */
 export default {
     formMode: { // 表单模式
@@ -25,4 +25,10 @@ export default {
         }
     },
     pageSizeDefault: 10,
+    queryListTarget: {
+        car: 'car',
+        brand: 'brand',
+        payType: 'payType',
+        billType: 'billType',
+    }
 }
