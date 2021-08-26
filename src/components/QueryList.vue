@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-08-17 16:58:43
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-25 20:02:27
+ * @LastEditTime: 2021-08-26 17:52:59
 -->
 <template>
   <el-dialog v-model="dialogVisible" :width="dialogWidth">
@@ -31,11 +31,17 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
 import { defineComponent, reactive, toRefs } from 'vue'
 import vPagination from '../components/Pagination.vue'
 
 export default defineComponent({
-  emits: ['clickOk'],
+  emits: [
+    'clickOk',
+    'handleCurrentChange',
+    'handleSizeChange',
+    'handleRefreshTable',
+  ],
   components: { vPagination },
   props: {
     target: {
@@ -75,21 +81,48 @@ export default defineComponent({
       currentRow: {},
     })
 
+    //打开事件
     const openDialog = () => {
       state.dialogVisible = true
     }
 
+    // 关闭事件
     const closeDialog = () => {
       state.dialogVisible = false
     }
 
+    // 当选择的数据发生变化
     const changeCurrentRow = (val) => {
       state.currentRow = val
     }
 
+    // 点击OK
     const clickOk = () => {
-      closeDialog()
-      emit('clickOk', { target: props.target, data: state.currentRow })
+      if (state.currentRow?.id) {
+        closeDialog()
+        emit('clickOk', { target: props.target, data: state.currentRow })
+      } else ElMessage.warning('请选择一条数据')
+    }
+
+    // 页面总条数发生变化-改变每页多少条
+    const handleSizeChange = (val) => {
+      emit('handleSizeChange', val)
+    }
+
+    // 当前页发生变化-换页
+    const handleCurrentChange = (val) => {
+      emit('handleCurrentChange', val)
+    }
+
+    // 刷新
+    const handleRefreshTable = () => {
+      emit('handleRefreshTable')
+    }
+
+    // 父级页面修改数据后调用此函数修改查询页面数据
+    const setQueryList = (data) => {
+      state.dataList = data.list
+      state.dataTotal = data.total
     }
 
     return {
@@ -98,6 +131,10 @@ export default defineComponent({
       closeDialog,
       changeCurrentRow,
       clickOk,
+      handleSizeChange,
+      handleCurrentChange,
+      handleRefreshTable,
+      setQueryList,
     }
   },
 })

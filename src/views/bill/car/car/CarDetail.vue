@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-27 16:25:31
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-25 20:23:23
+ * @LastEditTime: 2021-08-26 17:46:43
 -->
 
 <template>
@@ -36,7 +36,9 @@
       </template>
     </el-dialog>
     <v-query-list v-if="dialogSearch.visible" ref="vQueryListRef" :target="dialogSearch.target" :title="dialogSearch.title"
-      :width="dialogSearch.width" :queryData="dialogSearch.data" :columnMap="dialogSearch.columnMap" @clickOk="selectQuery"></v-query-list>
+      :width="dialogSearch.width" :queryData="dialogSearch.data" :columnMap="dialogSearch.columnMap" :pageSize="dialogSearch.pageSize"
+      :pageIndex="dialogSearch.pageIndex" @clickOk="selectQuery" @handleCurrentChange="handleQueryListPageChange"
+      @handleSizeChange="handleQueryListSizeChange" @handleRefreshTable="handleQueryListRefresh"></v-query-list>
   </div>
 </template>
 
@@ -106,6 +108,8 @@ export default defineComponent({
         columnMap: {},
         title: '',
         visible: false,
+        pageIndex: 1,
+        pageSize: constants.pageSizeDefault,
       },
     })
 
@@ -169,28 +173,14 @@ export default defineComponent({
 
     // 获取汽车品牌的所有数据-给查询页面使用
     const searchCarBrand = async () => {
-      try {
-        const result = await store.dispatch(carBrandACTypes.CARBRAND_SELECT, {
-          pageIndex: 1,
-          pageSize: constants.pageSizeDefault,
-        })
-        if (result.data.code) {
-          if (result?.data?.data) {
-            state.dialogSearch.data = result.data.data
-            state.dialogSearch.columnMap = getCarBrandColumnMap()
-            state.dialogSearch.title = '汽车品牌'
-            state.dialogSearch.visible = true
-            state.dialogSearch.target = constants.queryListTarget.car
-            nextTick(() => {
-              vQueryListRef.value.openDialog()
-            })
-          }
-        } else {
-          ElMessage.warning(result.message)
-        }
-      } catch (error) {
-        console.error(error)
-      }
+      state.dialogSearch.data = await getCarBrandList()
+      state.dialogSearch.columnMap = getCarBrandColumnMap()
+      state.dialogSearch.title = '汽车品牌'
+      state.dialogSearch.visible = true
+      state.dialogSearch.target = constants.queryListTarget.car
+      nextTick(() => {
+        vQueryListRef.value.openDialog()
+      })
     }
 
     // 查询页面点击OK按钮事件的监听事件
@@ -199,9 +189,9 @@ export default defineComponent({
         case constants.queryListTarget.car:
           state.carInfo.brand = queryResult.data
           // 单独校验汽车品牌字段
-          carForm.value.validateField('brand.brand',brandError =>{
-            if(brandError ){
-              return false;
+          carForm.value.validateField('brand.brand', (brandError) => {
+            if (brandError) {
+              return false
             }
           })
           break
@@ -218,6 +208,43 @@ export default defineComponent({
       }
     })
 
+    // 当在查询界面点击前进后退时触发
+    const handleQueryListPageChange = async (index) => {
+      state.dialogSearch.pageIndex = index
+      await refreshQueryList()
+    }
+
+    // 当在查询界面切换页面显示条数时触发
+    const handleQueryListSizeChange = async (size) => {
+      state.dialogSearch.pageSize = size
+      await refreshQueryList()
+    }
+
+    // 当查询界面点击刷新按钮时触发
+    const handleQueryListRefresh = async () => {
+      await refreshQueryList()
+    }
+
+    // 获取汽车品牌信息
+    const getCarBrandList = async () => {
+      try {
+        const result = await store.dispatch(carBrandACTypes.CARBRAND_SELECT, {
+          pageIndex: state.dialogSearch.pageIndex,
+          pageSize: state.dialogSearch.pageSize,
+        })
+        if (result?.data?.data) return result.data.data
+        else return []
+      } catch (error) {
+        throw new Error(error)
+      }
+    }
+
+    // 刷新查询页面列表
+    const refreshQueryList = async () => {
+      state.dialogSearch.data = await getCarBrandList()
+      vQueryListRef.value.setQueryList(state.dialogSearch.data)
+    }
+
     return {
       ...toRefs(state),
       carForm,
@@ -228,6 +255,9 @@ export default defineComponent({
       searchCarBrand,
       vQueryListRef,
       selectQuery,
+      handleQueryListPageChange,
+      handleQueryListSizeChange,
+      handleQueryListRefresh,
     }
   },
 })
