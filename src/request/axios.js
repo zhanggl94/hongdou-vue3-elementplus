@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-08 14:30:36
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-20 17:30:12
+ * @LastEditTime: 2021-08-27 16:23:40
  */
 
 import axios from 'axios'
@@ -14,6 +14,7 @@ import { setToken, getToken } from '../utils/utils'
 import router from '../router'
 import { ElMessage, ElLoading } from 'element-plus'
 
+axios.defaults.baseURL="http://localhost:3001" // 配置Axiso默认URL
 axios.defaults.timeout = 2000 * 10 // 请求超时时间
 axios.defaults.headers.post['Content-Type'] = 'application/json' // 请求头
 
