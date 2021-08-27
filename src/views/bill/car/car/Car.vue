@@ -4,7 +4,7 @@
  * @Autor: zhanggl
  * @Date: 2021-07-28 14:50:54
  * @LastEditors: zhanggl
- * @LastEditTime: 2021-08-20 17:56:50
+ * @LastEditTime: 2021-08-27 16:57:23
 -->
 <template>
   <div>
@@ -26,7 +26,11 @@
         <el-table-column type="selection" width="50"> </el-table-column>
         <el-table-column prop="name" width="200px" label="名称"></el-table-column>
         <el-table-column prop="brand.brand" width="200px" label="品牌"></el-table-column>
-        <el-table-column prop="isDefault" width="200px" label="是否默认"></el-table-column>
+        <el-table-column prop="isDefault" width="200px" label="是否默认">
+          <template #default="scope">
+            {{scope.row.isDefault?'是':'否'}}
+          </template>
+        </el-table-column>
         <el-table-column prop="note" label="备注"></el-table-column>
         <el-table-column header-align="center" align="center" prop="prop" label="操作" width="200">
           <template #default="scope">

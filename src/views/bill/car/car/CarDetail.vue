@@ -22,7 +22,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="是否默认" prop="isDefault">
-          <el-checkbox v-model="carInfo.isDefault" true-label=1 false-label=0></el-checkbox>
+          <el-checkbox v-model="carInfo.isDefault" :true-label=1 :false-label=0></el-checkbox>
         </el-form-item>
         <el-form-item label="备注" prop="note">
           <el-input type="textarea" :rows="3" v-model="carInfo.note" class="large-input"></el-input>
